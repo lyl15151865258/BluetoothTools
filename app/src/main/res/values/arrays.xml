@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string-array name="main_titles_arrays">
+        <item>@string/main_tab_name_watermeter</item>
+        <item>@string/main_tab_name_hotmeter</item>
+        <item>@string/main_tab_name_topworx</item>
+        <item>@string/main_tab_name_gprs</item>
+    </string-array>
+    <string-array name="watermater_viewpage_arrays">
+        <item>数据</item>
+        <item>显示</item>
+        <item>参数</item>
+        <item>系数</item>
+    </string-array>
+
+    <string-array name="permissionNames">
+        <item>@string/permission_storage</item>
+        <item>@string/permission_location</item>
+        <item>@string/permission_camera</item>
+        <item>@string/permission_cus_item_phone</item>
+        <item>系统设置</item>
+        <item>蓝牙</item>
+        <item>悬浮窗</item>
+    </string-array>
+
+</resources>

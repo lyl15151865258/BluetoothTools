@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 高德地图APIkey -->
+    <string name="AMAP_API_KEY">42532ce8a41809ac72671b93463cf56e</string>
+    <!-- 高德地图Web API key -->
+    <string name="AMAP_WEB_API_KEY">8d21b5787ddfdac95bba028fc3031ab5</string>
+
+    <!-- 百度地图APIkey -->
+    <string name="BAIDU_API_KEY">NjQn7sGQ5DjztIX3OgLzKQ0tV34ecfzw</string>
+
+    <!-- Mob SharedSDK Mob-AppKey -->
+    <string name="Mob_AppKey">1c7dd3f53c724</string>
+
+    <!-- Mob SharedSDK Mob-AppSecret -->
+    <string name="Mob_AppSecret">3088f793958fd37f7396137a5800cc1e</string>
+
+    <!-- 友盟APP_KEY -->
+    <string name="UMENG_APPKEY">59900cb1ae1bf877f400054d</string>
+
+    <!-- 友盟UMENG_MESSAGE_SECRET -->
+    <string name="UMENG_MESSAGE_SECRET">e68f6754201d1ed05eb8d3bfc0ea28fa</string>
+
+    <!-- 友盟的QQ分享 -->
+    <string name="UMENG_QQ">tencent1106224303</string>
+
+    <!-- 微信AppID -->
+    <string name="AppID_wechat">wx1326864b1f21f49f</string>
+
+    <!-- 微信AppSecret -->
+    <string name="AppSecret_wechat">4838600281aa678342611d447daaaef7</string>
+
+    <!-- QQ的AppID -->
+    <string name="AppID_QQ">1106224303</string>
+
+    <!-- QQ的AppKey -->
+    <string name="AppKey_QQ">8PJ2vxSpiph2oRjX</string>
+
+    <!-- 容联-云通讯app Id 设置ECPreferenceSettings-->
+    <string name="YTX_APP_KEY">8a216da85c34774c015c47a7d36b06ed</string>
+    <!-- 容联-云通讯app Token -->
+    <string name="YTX_APP_TOKEN">4ab49614450485beb7dc694f01c9f1d0</string>
+
+    <!-- 表情云AppId -->
+    <string name="BQMM_APPID">b0286226fbdb4a8f9620be51355eaee8</string>
+    <!-- 表情云AppSecret -->
+    <string name="BQMM_APPSECRET">7f7bcc8ab75c4bd5a8b823c25d782e3f</string>
+
+</resources>

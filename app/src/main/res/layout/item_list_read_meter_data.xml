@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_l1"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="@color/day_colorPrimary"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_5"
+        android:text="@string/readmeter_t1"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="@dimen/dp_2"
+        android:layout_height="match_parent"
+        android:background="@color/gray_1" />
+
+    <TextView
+        android:id="@+id/text_l2"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="@color/day_colorPrimary"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_5"
+        android:text="读表时间"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="@dimen/dp_2"
+        android:layout_height="match_parent"
+        android:background="@color/gray_1" />
+
+    <cn.njmeter.bluetooth.widget.MyListView
+        android:id="@+id/lv_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:background="@color/day_colorPrimary"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/gray_1"
+        android:dividerHeight="@dimen/dp_1"
+        android:gravity="center"
+        android:text="读取值"
+        android:textColor="@color/white" />
+
+</LinearLayout>

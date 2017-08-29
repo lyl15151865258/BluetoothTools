@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_deviceId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/textfield_normal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_5">
+
+        <ImageView
+            android:id="@+id/iv_scanCode"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:contentDescription="@null"
+            android:src="@mipmap/ic_discover_scan" />
+
+        <EditText
+            android:id="@+id/et_deviceId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="@string/input_id_hydrant"
+            android:inputType="number"
+            android:labelFor="@+id/et_deviceId"
+            android:maxLength="8"
+            android:textSize="@dimen/sp_18" />
+
+        <ImageView
+            android:id="@+id/iv_deleteDeviceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
+            android:src="@drawable/delete" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_read_alarm_parameters"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_alarm_data"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_set_alarm_parameters"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/set_alarm_data"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_read_alarm_state"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_alarm_state"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+
+        <Button
+            android:id="@+id/btn_read_meter_data"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_hydrant_data"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btn_readGPS"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_gps"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_refreshGPS"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/refresh_gps"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_read_usestate"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_current_use_data"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_read_useinformation"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_history_use_data"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_read_alarm_enabled"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/read_alarm_enabled"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_set_alarm_enabled"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/set_alarm_enabled"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+
+        <Button
+            android:id="@+id/btn_open"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/open_lock_hydrant"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <Button
+            android:id="@+id/btn_close"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button_selector"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/close_lock_hydrant"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_2"
+        android:layout_marginTop="@dimen/dp_3"
+        android:background="@color/gray_1" />
+
+    <include
+        android:id="@+id/scrollview_alarm_parameters"
+        layout="@layout/scrollview_alarm_parameters"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/scrollview_read_alarm_state"
+        layout="@layout/scrollview_read_alarm_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/scrollView_alarmEnabled"
+        layout="@layout/scrollview_alarm_enabled"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/scrollView_meter_data"
+        layout="@layout/scrollview_meter_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/relativelayout_map"
+        layout="@layout/hydrant_gps_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/current_use_state"
+        layout="@layout/current_use_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/history_use_data"
+        layout="@layout/hydrant_history_use_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_socket2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_5"
+        android:scrollbars="vertical"
+        android:textSize="@dimen/sp_12"
+        android:visibility="gone" />
+</LinearLayout>

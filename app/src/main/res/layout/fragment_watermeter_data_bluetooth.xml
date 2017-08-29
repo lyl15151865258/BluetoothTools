@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffefebe7"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true">
+
+        <CheckBox
+            android:id="@+id/readdata_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/readdata_check"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/et_meterId"
+            android:layout_width="0dp"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_x"
+            android:gravity="center"
+            android:hint="点击按钮获取数据"
+            android:maxLength="8"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18" />
+
+        <Button
+            android:id="@+id/btn_read_parameter"
+            style="@style/button_common_blue_s"
+            android:gravity="center"
+            android:text="@string/main_navigation_readdata" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_l1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/day_colorPrimary"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:text="@string/readmeter_t1"
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="@dimen/dp_2"
+            android:layout_height="fill_parent"
+            android:background="@color/gray_1" />
+
+        <TextView
+            android:id="@+id/text_l2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/day_colorPrimary"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:text="读表时间"
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="@dimen/dp_2"
+            android:layout_height="fill_parent"
+            android:background="@color/gray_1" />
+
+        <TextView
+            android:id="@+id/text_l3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@color/day_colorPrimary"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:text="读取值"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_2"
+        android:background="@color/gray_1" />
+
+    <ListView
+        android:id="@+id/listViewreaddata"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/gray_1"
+        android:dividerHeight="@dimen/dp_2"
+        android:overScrollMode="never"
+        android:fadingEdge="none"
+        android:scrollbars="none"
+        android:textColor="@color/black" />
+
+</LinearLayout>
