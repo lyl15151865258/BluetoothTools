@@ -570,6 +570,14 @@ public class WaterMeterParameterFragment extends BaseFragment implements View.On
                 dateandtimeHandler.sendMessage(msg);
             }
         });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            // @Override
+            public void onClick(View v) {
+                Message msg = new Message();
+                msg.what = SHOW_TIMEPICK;
+                dateandtimeHandler.sendMessage(msg);
+            }
+        });
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
             // @Override
             @SuppressLint("SimpleDateFormat")

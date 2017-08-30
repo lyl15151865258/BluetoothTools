@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +22,7 @@ import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.bean.TcpUdpParam;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
+import cn.njmeter.bluetooth.utils.CommonUtils;
 
 public class HydrantGPRSFragment extends BaseFragment implements View.OnClickListener {
 
@@ -123,7 +123,7 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
                     BluetoothToolsMainActivity.data = "";
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    Toast.makeText(context, "请输入11位IMEI号！", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context,"请输入11位IMEI号");
                 }
 
             }
@@ -185,7 +185,7 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
                     BluetoothToolsMainActivity.data = "";
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    Toast.makeText(context, "IP或端口输入错误！", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context,"IP或端口输入错误");
                 }
             }
         });

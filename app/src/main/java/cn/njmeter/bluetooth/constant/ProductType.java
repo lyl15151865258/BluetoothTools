@@ -13,9 +13,9 @@ public class ProductType {
     public static final String HEAT_METER = "20";                                               //智能热量表
     public static final String M_BUS = "48";                                                    //M_Bus主机
     public static final String ON_OFF_CONTROLLER = "49";                                        //通断控制器
-    public static final String CONTROL_VALVE = "49";                                            //智能控制阀
-    public static final String LORA = "49";                                                     //LoRa无线模块
-    public static final String PERMANENT_FLOW_VALVE = "49";                                     //智能恒流阀
+    public static final String CONTROL_VALVE = "50";                                            //智能控制阀
+    public static final String LORA = "54";                                                     //LoRa无线模块
+    public static final String PERMANENT_FLOW_VALVE = "56";                                     //智能恒流阀
     public static final String HYDRANT = "59";                                                  //智能消火栓
 
     //操作类型代码（用于指令解析时的switch-case）

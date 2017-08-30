@@ -446,6 +446,14 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
                 dateandtimeHandler.sendMessage(msg);
             }
         });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            // @Override
+            public void onClick(View v) {
+                Message msg = new Message();
+                msg.what = SHOW_TIMEPICK;
+                dateandtimeHandler.sendMessage(msg);
+            }
+        });
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
             // @Override
             @SuppressLint("SimpleDateFormat")
@@ -828,30 +836,6 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         }
 
     };
-
-    private void onClickUpdate() {
-
-        //new UpdateManager(getActivity(), true).checkUpdate();
-    }
-
-
-    public String Endworktime(String meterid, String producttypetx, String factorycode, String x) {
-        String r = "";
-        String rx = "";
-        int i = 1;
-
-        try {
-            rx = Integer.toHexString(Integer.valueOf(x.substring(0, 2))) + "00" +
-                    (Integer.valueOf(x.substring(2, 4)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(2, 4)))) : Integer.toHexString(Integer.valueOf(x.substring(2, 4)))) + "00" +
-                    (Integer.valueOf(x.substring(4, 6)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(4, 6)))) : Integer.toHexString(Integer.valueOf(x.substring(4, 6)))) + "00" +
-                    (Integer.valueOf(x.substring(6, 8)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(6, 8)))) : Integer.toHexString(Integer.valueOf(x.substring(6, 8)))) + "00";
-            String cs = AnalysisUtils.getCSSum("68" + producttypetx + meterid + factorycode + "360CA0198800" + rx, 0);
-            r = "68" + producttypetx + meterid + factorycode + "360CA0198800" + rx + cs + "16";
-        } catch (Exception e) {
-        }
-        return r;
-    }
-
 
     private void updateDateTimeDisplay() {
         CheckBoxsyn.setChecked(false);
