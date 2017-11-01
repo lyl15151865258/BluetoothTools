@@ -24,14 +24,13 @@ import cn.njmeter.bluetooth.utils.CommonUtils;
 public class GprsSetPressureFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.et_set_common_pressure)
-    EditText et_set_common_pressure;
-
+    EditText etSetCommonPressure;
     @BindView(R.id.btn_read_pressure_calibration)
-    Button btn_read_pressure_calibration;
+    Button btnReadPressureCalibration;
     @BindView(R.id.btn_set_zero_point_calibration)
-    Button btn_set_zero_point_calibration;
+    Button btnSetZeroPointCalibration;
     @BindView(R.id.btn_set_normal_point_calibration)
-    Button btn_set_normal_point_calibration;
+    Button btnSetNormalPointCalibration;
 
     private Context context;
 
@@ -48,7 +47,7 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void initView(View view) {
-        et_set_common_pressure.addTextChangedListener(new TextWatcher() {
+        etSetCommonPressure.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //限制小数点后面最多两位
@@ -56,42 +55,42 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
                     //限制小数位数不大于2个
                     if (s.length() - 1 - s.toString().indexOf(".") > 2) {
                         s = s.toString().subSequence(0, s.toString().indexOf(".") + 3);
-                        et_set_common_pressure.setText(s);
+                        etSetCommonPressure.setText(s);
                         //设置光标在末尾
-                        et_set_common_pressure.setSelection(s.length());
+                        etSetCommonPressure.setSelection(s.length());
                         CommonUtils.showToast(context, "最多两位小数");
                     }
                     //如果输入的值超过范围（0.00＜X≤10.00）弹出提示
                     if (s.length() - 1 - s.toString().indexOf(".") == 1 || s.length() - 1 - s.toString().indexOf(".") == 2) {
-                        if (et_set_common_pressure.getText().toString().equals("0.00") || Float.valueOf(et_set_common_pressure.getText().toString()) > 10.00f) {
+                        if (etSetCommonPressure.getText().toString().equals("0.00") || Float.valueOf(etSetCommonPressure.getText().toString()) > 10.00f) {
                             //去掉刚输入的数字
                             s = s.toString().subSequence(0, s.length() - 1);
-                            et_set_common_pressure.setText(s);
+                            etSetCommonPressure.setText(s);
                             //设置光标在末尾
-                            et_set_common_pressure.setSelection(s.length());
+                            etSetCommonPressure.setSelection(s.length());
                             CommonUtils.showToast(context, "设定范围0.00＜X≤10.00");
                         }
                     }
                 } else if (!TextUtils.isEmpty(s.toString())) {
-                    if (Integer.valueOf(et_set_common_pressure.getText().toString()) > 10) {
+                    if (Integer.valueOf(etSetCommonPressure.getText().toString()) > 10) {
                         s = s.toString().subSequence(0, s.length() - 1);
-                        et_set_common_pressure.setText(s);
+                        etSetCommonPressure.setText(s);
                         //设置光标在末尾
-                        et_set_common_pressure.setSelection(s.length());
+                        etSetCommonPressure.setSelection(s.length());
                         CommonUtils.showToast(context, "设定范围0.00＜X≤10.00");
                     }
                 }
                 //如果直接输入小数点，前面自动补0
                 if (s.toString().trim().equals(".")) {
                     s = "0" + s;
-                    et_set_common_pressure.setText(s);
-                    et_set_common_pressure.setSelection(2);
+                    etSetCommonPressure.setText(s);
+                    etSetCommonPressure.setSelection(2);
                 }
                 //除了小数开头不能为0，而且开头不允许连续出现0
                 if (s.toString().startsWith("0") && s.toString().trim().length() > 1) {
                     if (!s.toString().substring(1, 2).equals(".")) {
-                        et_set_common_pressure.setText(s.subSequence(0, 1));
-                        et_set_common_pressure.setSelection(1);
+                        etSetCommonPressure.setText(s.subSequence(0, 1));
+                        etSetCommonPressure.setSelection(1);
                     }
                 }
             }
@@ -107,7 +106,7 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
         });
 
         //读取压力标定
-        btn_read_pressure_calibration.setOnClickListener(new OnMultiClickListener() {
+        btnReadPressureCalibration.setOnClickListener(new OnMultiClickListener() {
             @Override
             public void onMultiClick(View v) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -126,7 +125,7 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
         });
 
         //零点标定
-        btn_set_zero_point_calibration.setOnClickListener(new OnMultiClickListener() {
+        btnSetZeroPointCalibration.setOnClickListener(new OnMultiClickListener() {
             @Override
             public void onMultiClick(View v) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -146,14 +145,14 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
         });
 
         //常用点标定
-        btn_set_normal_point_calibration.setOnClickListener(new OnMultiClickListener() {
+        btnSetNormalPointCalibration.setOnClickListener(new OnMultiClickListener() {
             @Override
             public void onMultiClick(View v) {
-                if (TextUtils.isEmpty(et_set_common_pressure.getText())) {
+                if (TextUtils.isEmpty(etSetCommonPressure.getText())) {
                     CommonUtils.showToast(context, "请先输入设定值");
                     return;
-                } else if (et_set_common_pressure.getText().toString().contains(".")) {
-                    if (et_set_common_pressure.getText().toString().length() - 1 - et_set_common_pressure.getText().toString().indexOf(".") != 2) {
+                } else if (etSetCommonPressure.getText().toString().contains(".")) {
+                    if (etSetCommonPressure.getText().toString().length() - 1 - etSetCommonPressure.getText().toString().indexOf(".") != 2) {
                         CommonUtils.showToast(context, "设定值必须为两位小数");
                         return;
                     }
@@ -161,7 +160,7 @@ public class GprsSetPressureFragment extends BaseFragment implements View.OnClic
                     CommonUtils.showToast(context, "设定值必须为两位小数");
                     return;
                 }
-                int normal_point_calibration = Math.round(Float.valueOf(et_set_common_pressure.getText().toString()) * 100000);
+                int normal_point_calibration = Math.round(Float.valueOf(etSetCommonPressure.getText().toString()) * 100000);
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("7B8900243030303030303030303030");
                 StringBuilder sb = new StringBuilder();

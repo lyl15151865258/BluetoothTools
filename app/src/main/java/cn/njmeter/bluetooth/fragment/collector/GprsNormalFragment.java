@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,9 @@ import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.bean.TcpUdpParam;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
+import cn.njmeter.bluetooth.utils.CommonUtils;
+import cn.njmeter.bluetooth.utils.MathUtils;
+import cn.njmeter.bluetooth.utils.RegexUtils;
 
 public class GprsNormalFragment extends BaseFragment implements View.OnClickListener {
 
@@ -62,14 +66,8 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
     RadioButton radioTcpServer;
     @BindView(R.id.radioUdpServer)
     RadioButton radioUdpServer;
-    @BindView(R.id.editTextIP1)
-    EditText editTextIP1;
-    @BindView(R.id.editTextIP2)
-    EditText editTextIP2;
-    @BindView(R.id.editTextIP3)
-    EditText editTextIP3;
-    @BindView(R.id.editTextIP4)
-    EditText editTextIP4;
+    @BindView(R.id.et_ip)
+    EditText et_ip;
     @BindView(R.id.editTextPort)
     EditText editTextPort;
     @BindView(R.id.btnSetComm)
@@ -78,6 +76,8 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
     Button btnReadComm;
     @BindView(R.id.btnGprsDefault)
     Button btnGprsDefault;
+    @BindView(R.id.btnDomainNameDefault)
+    Button btnDomainNameDefault;
 
 
     @BindView(R.id.spinnerupdatecycle)
@@ -224,12 +224,11 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     String cs = Integer.toHexString(checksum);
                     sb.append(cs.substring(cs.length() - 2));
                     sb.append("167B");
-                    //Toast.makeText(getApplicationContext(), tx, Toast.LENGTH_SHORT).show();
                     System.out.println(sb.toString());
                     BluetoothToolsMainActivity.data = "";
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    Toast.makeText(context, "请输入11位IMEI号！", Toast.LENGTH_SHORT).show();
+                    showToast("请输入11位IMEI号");
                 }
 
             }
@@ -249,52 +248,62 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
 
             @Override
             public void onClick(View arg0) {
-                editTextIP1.setText("58");
-                editTextIP2.setText("240");
-                editTextIP3.setText("47");
-                editTextIP4.setText("50");
+                et_ip.setText("58.240.47.50");
+            }
+        });
+        btnDomainNameDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                et_ip.setText("www.metter.cn");
             }
         });
         btnSetComm.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-
+                String ip = et_ip.getText().toString();
+                String port = editTextPort.getText().toString();
+                if (TextUtils.isEmpty(ip)) {
+                    CommonUtils.showToast(context, "请输入IP地址或域名");
+                    return;
+                }
+                if (TextUtils.isEmpty(port)) {
+                    CommonUtils.showToast(context, "请输入端口号");
+                    return;
+                }
                 tvGprsParam.setTextColor(colorgray);
                 //7B89003D30303030303030303030306848111111110011110703C11E0122544350222C2235382E3234302E34372E3530222C2235303034220D2361167B
                 StringBuilder sb = new StringBuilder();
                 sb.append("7B89003D30303030303030303030306848111111110011110703C11E01");
-                TcpUdpParam param = new TcpUdpParam();
+                StringBuilder param = new StringBuilder();
                 if (radioTcpServer.isChecked()) {
-                    param.setMode("TCP");
+                    param.append("\"TCP\"");
                 } else {
-                    param.setMode("UDP");
+                    param.append("\"UDP\"");
                 }
-                param.setIp1(editTextIP1.getText().toString().replace(" ", ""));
-                param.setIp2(editTextIP2.getText().toString().replace(" ", ""));
-                param.setIp3(editTextIP3.getText().toString().replace(" ", ""));
-                param.setIp4(editTextIP4.getText().toString().replace(" ", ""));
-                param.setPort(editTextPort.getText().toString().replace(" ", ""));
-                // BluetoothPrinterMainActivity.writeData(tx);
-                if (param.isIsvalid()) {
-                    sb.append(getHexStr(param));
+                param.append(",");
+                param.append("\"");
+                param.append(ip);
+                param.append("\",\"");
+                param.append(port);
+                param.append("\"");
+                if (!RegexUtils.checkPort(port)) {
+                    CommonUtils.showToast(context, "端口号输入错误");
+                    return;
+                }
+                if (RegexUtils.checkIpAddress(ip) || RegexUtils.checkDomainName(ip)) {
+                    sb.append(MathUtils.getHexStr(param.toString()));
                     sb.append("0D23");
-
                     String checkStr = sb.substring(sb.indexOf("68"));
-                    int len = checkStr.length() - 20;
-                    //StringBuffer sbf = new StringBuffer(checkStr);
-                    // sb.replace(50, 52, len<17?("0"+Integer.toHexString(len)):(Integer.toHexString(len)));
-                    checkStr = sb.substring(sb.indexOf("68"));
                     int checksum = getCheckSum(checkStr);
                     String cs = Integer.toHexString(checksum);
                     sb.append(cs.substring(cs.length() - 2));
                     sb.append("167B");
                     sb.replace(6, 8, sb.length() / 2 < 17 ? ("0" + Integer.toHexString(sb.length() / 2)) : (Integer.toHexString(sb.length() / 2)));
                     BluetoothToolsMainActivity.data = "";
-                    System.out.println("settcp:" + sb.toString());
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    Toast.makeText(context, "IP或端口输入错误！", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "IP地址或域名输入错误");
                 }
             }
         });
@@ -311,7 +320,6 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
             }
         });
         btnReadDatetime.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
                 textViewDateTime.setTextColor(colorgray);
@@ -320,97 +328,8 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                 BluetoothToolsMainActivity.writeData(tx);
             }
         });
-        // btnSynchDatetime.setOnClickListener(new View.OnClickListener() {
-
-        //      @Override
-        //      public void onClick(View arg0) {
-        //7B8900273030303030303030303030684811111111001111040AA0150016 150803081620 4D167B
-                /*textViewDateTime.setTextColor(colorgray);
-                if(checkBoxDateRefresh.isChecked()){
-                    Calendar mCalendar= Calendar.getInstance();
-                    int mYear = mCalendar.get(Calendar.YEAR);
-                    int mMonth = mCalendar.get(Calendar.MONTH)+1;
-                    int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-                    int mHour= mCalendar.get(Calendar.HOUR_OF_DAY);
-                    int mMinuts= mCalendar.get(Calendar.MINUTE);
-                    int mSenconds= mCalendar.get(Calendar.SECOND);
-                    int checksum = 473;
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("7B8900273030303030303030303030684811111111001111040AA01500");
-                    sb.append(mSenconds/10+""+mSenconds%10);
-                    checksum += (mSenconds/10*16+mSenconds%10);
-                    sb.append(mMinuts/10+""+mMinuts%10);
-                    checksum += (mMinuts/10*16+mMinuts%10);
-                    sb.append(mHour/10+""+mHour%10);
-                    checksum += (mHour/10*16+mHour%10);
-                    sb.append(mDay/10+""+mDay%10);
-                    checksum += (mDay/10*16+mDay%10);
-                    sb.append(mMonth/10+""+mMonth%10);
-                    checksum += (mMonth/10*16+mMonth%10);
-                    System.out.println("mYear:"+mYear);
-                    System.out.println((mYear%100)/10+""+(mYear%100)%10);
-                    sb.append((mYear%100)/10+""+(mYear%100)%10);
-                    checksum += ((mYear%100)/10*16+(mYear%100)%10);
-                    sb.append((mYear/100)/10+""+(mYear/100)%10);
-                    checksum += ((mYear/100)/10*16+(mYear/100)%10);
-                    String cs = Integer.toHexString(checksum);
-                    sb.append(cs.substring(cs.length()-2));
-                    sb.append("167B");
-                    //Toast.makeText(getApplicationContext(), tx, Toast.LENGTH_SHORT).show();
-                    System.out.println(sb.toString());
-                    BluetoothPrinterMainActivity.data = "";
-                    BluetoothPrinterMainActivity.writeData(sb.toString());
-                }else{
-
-                    String newYear = editTextYear.getText().toString().replace(" ", "");
-                    String newMonth = editTextMonth.getText().toString().replace(" ", "");
-                    String newDay = editTextDay.getText().toString().replace(" ", "");
-                    String newHour = editTextHour.getText().toString().replace(" ", "");
-                    String newMinute = editTextMinute.getText().toString().replace(" ", "");
-                    String newSecond = editTextSecond.getText().toString().replace(" ", "");
-                    int iYear = Integer.parseInt(newYear);
-                    int iMonth = Integer.parseInt(newMonth);
-                    int iDay = Integer.parseInt(newDay);
-                    int iHour = Integer.parseInt(newHour);
-                    int iMinute = Integer.parseInt(newMinute);
-                    int iSecond = Integer.parseInt(newSecond);
-
-                    if(iMonth<13 && iDay<32 && iHour<24 && iMinute<60 && iSecond<60){
-                        int checksum = 473;
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("7B8900273030303030303030303030684811111111001111040AA01500");
-                        sb.append(newSecond);
-                        checksum += (iSecond/10*16+iSecond%10);
-                        sb.append(newMinute);
-                        checksum += (iMinute/10*16+iMinute%10);
-                        sb.append(newHour);
-                        checksum += (iHour/10*16+iHour%10);
-                        sb.append(newDay);
-                        checksum += (iDay/10*16+iDay%10);
-                        sb.append(newMonth);
-                        checksum += (iMonth/10*16+iMonth%10);
-                        sb.append(newYear.substring(2));
-                        sb.append(newYear.substring(0,2));
-                        checksum += (iYear%100/10*16+iYear%100%10);
-                        checksum += (iYear/100/10*16+iYear/100%10);
-                        String cs = Integer.toHexString(checksum);
-                        sb.append(cs.substring(cs.length()-2));
-                        sb.append("167B");
-                        System.out.println(sb.toString());
-                        BluetoothPrinterMainActivity.data = "";
-                        BluetoothPrinterMainActivity.writeData(sb.toString());
-
-                    }else{
-                        Toast.makeText(context, "日期或时间输入错误！", Toast.LENGTH_SHORT).show();
-
-                    }
-                }*/
-        //   }
-        //});
-
-
         tv_date.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_DATAPICK;
@@ -418,7 +337,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
             }
         });
         tv_time.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_TIMEPICK;
@@ -428,6 +347,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
             // @Override
             @SuppressLint("SimpleDateFormat")
+            @Override
             public void onClick(View v) {
                 String x, rx;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -438,7 +358,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     rx = sdf1.format(xd);
                     rx = rx.substring(0, 10) + rx.substring(12, 14) + rx.substring(10, 12);
                 } catch (Exception e) {
-                    Toast.makeText(context, "请正确输入当前时间", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请正确输入当前时间");
                     return;
                 }
                 int checksum = 473;
@@ -457,7 +377,6 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                 sb.append(cs.substring(cs.length() - 2));
                 sb.append("167B");
 
-                //EditTextsend.setText(tx);
                 BluetoothToolsMainActivity.data = "";
                 BluetoothToolsMainActivity.writeData(sb.toString());
             }
@@ -479,7 +398,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                                                                  case 4:
                                                                      if (spinnerpwrbattery.getSelectedItemPosition() == 0) {
                                                                          isSetParamLegal = false;
-                                                                         Toast.makeText(context, "您选择的抄表周期与上传周期冲突！", Toast.LENGTH_SHORT).show();
+                                                                         CommonUtils.showToast(context, "您选择的抄表周期与上传周期冲突");
                                                                      } else {
                                                                          isSetParamLegal = true;
                                                                      }
@@ -488,7 +407,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                                                                      if (spinnerpwrbattery.getSelectedItemPosition() == 0
                                                                              || spinnerpwrbattery.getSelectedItemPosition() == 1) {
                                                                          isSetParamLegal = false;
-                                                                         Toast.makeText(context, "您选择的抄表周期与上传周期冲突！", Toast.LENGTH_SHORT).show();
+                                                                         CommonUtils.showToast(context, "您选择的抄表周期与上传周期冲突");
                                                                      } else {
                                                                          isSetParamLegal = true;
                                                                      }
@@ -513,7 +432,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     case 0:
                         if (spinnerupdatecycle.getSelectedItemPosition() >= 4) {
                             isSetParamLegal = false;
-                            Toast.makeText(context, "您选择的抄表周期与上传周期冲突！", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "您选择的抄表周期与上传周期冲突");
                         } else {
                             isSetParamLegal = true;
                         }
@@ -521,7 +440,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     case 1:
                         if (spinnerupdatecycle.getSelectedItemPosition() >= 5) {
                             isSetParamLegal = false;
-                            Toast.makeText(context, "您选择的抄表周期与上传周期冲突！", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "您选择的抄表周期与上传周期冲突");
                         } else {
                             isSetParamLegal = true;
                         }
@@ -580,20 +499,24 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     StringBuilder sb = new StringBuilder();
                     sb.append("684811111111001111150F857600");
                     int updatecycle = spinnerupdatecycle.getSelectedItemPosition();
-                    if (hours1_int[updatecycle] < 16)
+                    if (hours1_int[updatecycle] < 16) {
                         sb.append("0");
+                    }
                     sb.append(Integer.toHexString(hours1_int[updatecycle]));
                     int updatehour = spinnerupdatehour.getSelectedItemPosition();
-                    if (hours2_int[updatehour] < 16)
+                    if (hours2_int[updatehour] < 16) {
                         sb.append("0");
+                    }
                     sb.append(Integer.toHexString(hours2_int[updatehour]));
                     int pwrbattery = spinnerpwrbattery.getSelectedItemPosition();
-                    if (minutes1_int[pwrbattery] < 16)
+                    if (minutes1_int[pwrbattery] < 16) {
                         sb.append("0");
+                    }
                     sb.append(Integer.toHexString(minutes1_int[pwrbattery]));
                     int pwrelectric = spinnerpwrelectric.getSelectedItemPosition();
-                    if (minutes2_int[pwrelectric] < 16)
+                    if (minutes2_int[pwrelectric] < 16) {
                         sb.append("0");
+                    }
                     sb.append(Integer.toHexString(minutes2_int[pwrelectric]));
                     sb.append("0000000000000000");
                     int checksum = getCheckSum(sb.toString());
@@ -606,8 +529,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     String tx = stringBuilder.toString().toUpperCase().replace(" ", "");
                     BluetoothToolsMainActivity.writeData(tx);
                 } else {
-                    Toast.makeText(context, "您选择的抄表周期与上传周期冲突！", Toast.LENGTH_SHORT).show();
-
+                    CommonUtils.showToast(context, "您选择的抄表周期与上传周期冲突");
                 }
             }
         });
@@ -637,6 +559,7 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
         };
         datetimetimer = new Timer();
         datetimetimer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 Message msg = new Message();
                 msg.what = 1;
@@ -644,17 +567,6 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
             }
         }, 0, 1000);
 
-    }
-
-    public String getHexStr(TcpUdpParam param) {
-        String strtcp = param.toString();
-        byte[] tcpbytes = strtcp.getBytes();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tcpbytes.length; i++) {
-            sb.append(Integer.toHexString(tcpbytes[i]));
-        }
-        System.out.println(sb.toString().toUpperCase());
-        return sb.toString().toUpperCase();
     }
 
     public int getCheckSum(String param) {
@@ -679,8 +591,6 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
     }
 
     Handler dateandtimeHandler = new Handler() {
-        Calendar calendar;// 用来装日期的
-        DatePickerDialog dialog;
 
         @SuppressWarnings("deprecation")
         @Override
@@ -717,6 +627,8 @@ public class GprsNormalFragment extends BaseFragment implements View.OnClickList
                     break;
                 case SHOW_CLOSEDATAPICK:
                     //showDialog(CLOSEDATE_DIALOG_ID);
+                    break;
+                default:
                     break;
             }
         }

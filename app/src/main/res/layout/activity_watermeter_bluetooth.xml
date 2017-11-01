@@ -163,5 +163,32 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_e"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_3">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pressure_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="压力标定"
+                android:textColor="@drawable/color_radiobutton"
+                android:textSize="@dimen/sp_12" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

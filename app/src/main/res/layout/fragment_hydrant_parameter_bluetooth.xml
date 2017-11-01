@@ -60,7 +60,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_amendmeteridhint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="number"
                     android:maxLength="8"
                     android:maxLines="1"
                     android:textColor="@color/black">
@@ -185,7 +185,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_amendxhint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
 
                 <Button
@@ -211,7 +211,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_slopehint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
 
                 <Button
@@ -236,7 +236,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_startfhint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
 
                 <Button
@@ -261,7 +261,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_div1hint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
 
                 <EditText
@@ -274,7 +274,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_div2hint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
 
                 <EditText
@@ -287,7 +287,7 @@
                     android:background="@drawable/edit_text_x"
                     android:gravity="center"
                     android:hint="@string/setparameter_div3hint"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black" />
             </LinearLayout>
 
@@ -340,11 +340,13 @@
                     android:id="@+id/EditTextsleeptime"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_text_x"
+                    android:digits="0123456789ABCDEF"
                     android:gravity="center"
                     android:hint="@string/setparameter_sleeptimehint"
-                    android:inputType="number|numberDecimal"
                     android:textColor="@color/black" />
             </LinearLayout>
 

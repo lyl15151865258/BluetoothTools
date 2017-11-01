@@ -350,19 +350,24 @@ public class HeatMeterAdjustFragment extends BaseFragment implements View.OnClic
                                 .setMessage("确定要恢复出厂值吗？")
                                 .setPositiveButton("确定",
                                         new DialogInterface.OnClickListener() {
+                                            @Override
                                             public void onClick(DialogInterface dialog, int whichButton) {
                                                 int xi = 0, yi = 0, zi = 0, oi = 0;
                                                 SharedPreferences sharedPreferences = context.getSharedPreferences("setQnParam", Context.MODE_PRIVATE);
                                                 Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
                                                 for (Map.Entry<String, String> entry : map.entrySet()) {
-                                                    if (entry.getKey().endsWith(meterId + "qn_2"))
+                                                    if (entry.getKey().endsWith(meterId + "qn_2")) {
                                                         xi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qn2_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qn2_2")) {
                                                         yi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qn1_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qn1_2")) {
                                                         zi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qmin_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qmin_2")) {
                                                         oi = Integer.parseInt(entry.getValue());
+                                                    }
                                                 }
 
                                                 if (xi != 0 && yi != 0 && zi != 0 && oi != 0) {
@@ -399,6 +404,7 @@ public class HeatMeterAdjustFragment extends BaseFragment implements View.OnClic
 
                                             }
                                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
                                     public void onClick(DialogInterface dialog, int whichButton) {
 
                                     }
@@ -544,15 +550,15 @@ public class HeatMeterAdjustFragment extends BaseFragment implements View.OnClic
         try {
             xi = Integer.parseInt(x);
             if (xi > 1500) {
-                Toast.makeText(context, "请正确输入调整值(<1500)", Toast.LENGTH_SHORT).show();
+                CommonUtils.showToast(context, "请正确输入调整值(<1500)");
                 return;
             }
             if (xi < 500) {
-                Toast.makeText(context, "请正确输入调整值(>=500)", Toast.LENGTH_SHORT).show();
+                CommonUtils.showToast(context, "请正确输入调整值(>=500)");
                 return;
             }
         } catch (Exception e) {
-            Toast.makeText(context, "请正确输入调整值(<255)", Toast.LENGTH_SHORT).show();
+            CommonUtils.showToast(context, "请正确输入调整值(<<255)");
             return;
         }
         String tx = adjust(meterId, productType, "001111", xi);
@@ -795,3 +801,4 @@ public class HeatMeterAdjustFragment extends BaseFragment implements View.OnClic
         }
     }
 }
+

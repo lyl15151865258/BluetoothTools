@@ -22,7 +22,7 @@ import cn.njmeter.bluetooth.interfaces.OnMultiClickListener;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
 import cn.njmeter.bluetooth.utils.CommonUtils;
 
-public class GprsAddDeleteMeterFragment extends BaseFragment implements View.OnClickListener {
+public class  GprsAddDeleteMeterFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.et_meterId)
     EditText et_meterId;

@@ -150,14 +150,5 @@ public class ValveSettingActivity extends BaseActivity {
         BluetoothToolsMainActivity.currentFragment = (Integer) linearLayout.getTag();
         viewPager.setCurrentItem(BluetoothToolsMainActivity.currentFragment, false);
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            myFinish();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }
 

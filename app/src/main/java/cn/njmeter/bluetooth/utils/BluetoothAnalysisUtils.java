@@ -2698,6 +2698,24 @@ public class BluetoothAnalysisUtils {
                                 }
                             }
                         }
+                        //读取压力标定  684811111111001111BB0E805500000000000F424000000D2577167B
+                        if (control_code1.equals("BB") & control_code2.equals("80") & control_code3.equals("55")) {
+                            if (AnalysisUtils.checksum(data.substring(0, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2), 0, data.substring((AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2)) == 1) {
+                                r = ProductType.WATER_METER_READ_PRESSURE;
+                            }
+                        }
+                        //压力标定成功
+                        if (control_code1.equals("BB") & control_code2.equals("80") & control_code3.equals("54")) {
+                            if (AnalysisUtils.checksum(data.substring(0, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2), 0, data.substring((AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2)) == 1) {
+                                r = ProductType.WATER_METER_SET_PRESSURE_SUCCESS;
+                            }
+                        }
+                        //压力标定失败
+                        if (control_code1.equals("7B") & control_code2.equals("80") & control_code3.equals("54")) {
+                            if (AnalysisUtils.checksum(data.substring(0, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2), 0, data.substring((AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2 - 2, (AnalysisUtils.HexS2ToInt(length_tx) + 13) * 2 - 2)) == 1) {
+                                r = ProductType.WATER_METER_SET_PRESSURE_FAIL;
+                            }
+                        }
                     }
                 }
                 //智能消火栓

@@ -12,15 +12,54 @@ import java.text.NumberFormat;
 
 /**
  * Created by LiYuliang on 2017/3/21 0021.
- * 文字转换工具类
+ * 数字转换工具类
+ *
+ * @author LiYuliang
+ * @version 2017/10/24
  */
 
 public class MathUtils {
+
+    static String[] hexStr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
+
+    /**
+     * 二进制转十六进制
+     *
+     * @param binary 二进制数据
+     * @return 十六进制数据
+     */
+    public static String binary2hex(String binary) {
+        int length = binary.length();
+        int temp = length % 4;
+        // 每四位2进制数字对应一位16进制数字
+        // 补足4位
+        if (temp != 0) {
+            for (int i = 0; i < 4 - temp; i++) {
+                binary = "0" + binary;
+            }
+        }
+        // 重新计算长度
+        length = binary.length();
+        StringBuilder sb = new StringBuilder();
+        // 每4个二进制数为一组进行计算
+        for (int i = 0; i < length / 4; i++) {
+            int num = 0;
+            // 将4个二进制数转成整数
+            for (int j = i * 4; j < i * 4 + 4; j++) {
+                num <<= 1;// 左移
+                num |= (binary.charAt(j) - '0');// 或运算
+            }
+            // 直接找到该整数对应的16进制，这里不用switch来做
+            sb.append(hexStr[num]);
+        }
+        return sb.toString();
+    }
+
     /**
      * 把16进制字符串转换成字节数组
      *
-     * @param hex
-     * @return
+     * @param hex 16进制数
+     * @return 字节数组
      */
     public static byte[] hexStringToByte(String hex) {
         int len = (hex.length() / 2);
@@ -41,16 +80,17 @@ public class MathUtils {
     /**
      * 把字节数组转换成16进制字符串
      *
-     * @param bArray
-     * @return
+     * @param bArray 字节数组
+     * @return 16进制字符串
      */
-    public static final String bytesToHexString(byte[] bArray) {
+    public static String bytesToHexString(byte[] bArray) {
         StringBuffer sb = new StringBuffer(bArray.length);
         String sTemp;
         for (int i = 0; i < bArray.length; i++) {
             sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
+            if (sTemp.length() < 2) {
                 sb.append(0);
+            }
             sb.append(sTemp.toUpperCase());
         }
         return sb.toString();
@@ -59,12 +99,12 @@ public class MathUtils {
     /**
      * 把字节数组转换为对象
      *
-     * @param bytes
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @param bytes 字节数组
+     * @return 对象
+     * @throws IOException            输入输出异常
+     * @throws ClassNotFoundException 类未找到异常
      */
-    public static final Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException {
+    public static Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException {
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         ObjectInputStream oi = new ObjectInputStream(in);
         Object o = oi.readObject();
@@ -75,11 +115,11 @@ public class MathUtils {
     /**
      * 把可序列化对象转换成字节数组
      *
-     * @param s
-     * @return
-     * @throws IOException
+     * @param s 序列化的对象
+     * @return 字节数组
+     * @throws IOException 输入输出异常
      */
-    public static final byte[] objectToBytes(Serializable s) throws IOException {
+    public static byte[] objectToBytes(Serializable s) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream ot = new ObjectOutputStream(out);
         ot.writeObject(s);
@@ -88,22 +128,61 @@ public class MathUtils {
         return out.toByteArray();
     }
 
-    public static final String objectToHexString(Serializable s) throws IOException {
+    public static String objectToHexString(Serializable s) throws IOException {
         return bytesToHexString(objectToBytes(s));
     }
 
-    public static final Object hexStringToObject(String hex) throws IOException, ClassNotFoundException {
+    public static Object hexStringToObject(String hex) throws IOException, ClassNotFoundException {
         return bytesToObject(hexStringToByte(hex));
     }
 
     /**
-     * @函数功能: BCD码转为10进制串(阿拉伯数据)
-     * @输入参数: BCD码
-     * @输出结果: 10进制串
+     * 字符串转16进制编码字符串
+     *
+     * @param param 字符串
+     * @return 16进制编码字符串
+     */
+    public static String getHexStr(String param) {
+        byte[] bytes = param.getBytes();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(Integer.toHexString(bytes[i]));
+        }
+        System.out.println(sb.toString().toUpperCase());
+        return sb.toString().toUpperCase();
+    }
+
+    /**
+     * 16进制字符串编码转字符串
+     *
+     * @param s
+     * @return
+     */
+    public static String getStringHex(String s) {
+        byte[] bytes = new byte[s.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            try {
+                bytes[i] = (byte) (0xff & Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            s = new String(bytes, "utf-8");
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return s;
+    }
+
+    /**
+     * BCD码转为10进制串(阿拉伯数据)
+     *
+     * @param bytes BCD码
+     * @return 10进制串
      */
     public static String bcd2Str(byte[] bytes) {
         StringBuffer temp = new StringBuffer(bytes.length * 2);
-
         for (int i = 0; i < bytes.length; i++) {
             temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
             temp.append((byte) (bytes[i] & 0x0f));
@@ -112,9 +191,10 @@ public class MathUtils {
     }
 
     /**
-     * @函数功能: 10进制串转为BCD码
-     * @输入参数: 10进制串
-     * @输出结果: BCD码
+     * 10进制串转为BCD码
+     *
+     * @param asc 10进制串
+     * @return BCD码
      */
     public static byte[] str2Bcd(String asc) {
         int len = asc.length();
@@ -252,5 +332,65 @@ public class MathUtils {
             }
         }
         return i;
+    }
+
+    public static int HexS1ToInt(char ch) {
+        if ('a' <= ch && ch <= 'f') {
+            return ch - 'a' + 10;
+        }
+        if ('A' <= ch && ch <= 'F') {
+            return ch - 'A' + 10;
+        }
+        if ('0' <= ch && ch <= '9') {
+            return ch - '0';
+        }
+        throw new IllegalArgumentException(String.valueOf(ch));
+    }
+
+    public static int hexS2ToInt(String s) {
+        int r;
+        char a[] = s.toCharArray();
+        r = HexS1ToInt(a[0]) * 16 + HexS1ToInt(a[1]);
+        return r;
+    }
+
+    /**
+     * 位数不够补零（左补0）
+     *
+     * @param str       原数字字符串
+     * @param strLength 最终需要的长度
+     * @return 补0后的数字字符串
+     */
+    public static String addZeroForLeft(String str, int strLength) {
+        int strLen = str.length();
+        if (strLen < strLength) {
+            while (strLen < strLength) {
+                StringBuilder sb = new StringBuilder(str);
+                sb.insert(0, "0");//左补0
+                str = sb.toString();
+                strLen = str.length();
+            }
+        }
+        return str;
+    }
+
+    /**
+     * 位数不够补零（右补0）
+     *
+     * @param str       原数字字符串
+     * @param strLength 最终需要的长度
+     * @return 补0后的数字字符串
+     */
+    public static String addZeroForRight(String str, int strLength) {
+        int strLen = str.length();
+        if (strLen < strLength) {
+            while (strLen < strLength) {
+                StringBuilder sb = new StringBuilder(str);
+                sb.insert(strLen, "0");//右补0
+                str = sb.toString();
+                strLen = str.length();
+            }
+        }
+        return str;
     }
 }

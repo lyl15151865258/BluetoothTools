@@ -24,6 +24,7 @@ import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterAdjustFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterDataFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterLcdFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterParameterFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterSetPressureFragment;
 import cn.njmeter.bluetooth.utils.ScreenTools;
 import cn.njmeter.bluetooth.widget.NoScrollViewPager;
 
@@ -33,7 +34,7 @@ import cn.njmeter.bluetooth.widget.NoScrollViewPager;
  */
 
 public class WaterMeterSettingActivity extends BaseActivity {
-    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
+    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
     LinearLayout[] menus;
     @BindView(R.id.viewpager)
     NoScrollViewPager viewPager;
@@ -62,7 +63,7 @@ public class WaterMeterSettingActivity extends BaseActivity {
         iv_search_bluetooth_device.setImageResource(imageSrc);
         viewPager.setAdapter(viewPagerAdapter);
         //设置Fragment预加载，非常重要,可以保存每个页面fragment已有的信息,防止切换后原页面信息丢失
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
         //刚进来默认选择第一个
         menus[0].setSelected(true);
         //viewPager添加滑动监听，用于控制TextView的展示
@@ -125,7 +126,7 @@ public class WaterMeterSettingActivity extends BaseActivity {
     private FragmentStatePagerAdapter viewPagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -139,13 +140,17 @@ public class WaterMeterSettingActivity extends BaseActivity {
                     return new WaterMeterParameterFragment();
                 case 3:
                     return new WaterMeterAdjustFragment();
+                case 4:
+                    return new WaterMeterSetPressureFragment();
+                default:
+                    break;
             }
             return null;
         }
     };
 
     //TextView点击事件
-    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
+    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
     public void onClick(LinearLayout linearLayout) {
         for (int i = 0; i < menus.length; i++) {
             menus[i].setSelected(false);
@@ -156,15 +161,6 @@ public class WaterMeterSettingActivity extends BaseActivity {
         //参数false代表瞬间切换，true表示平滑过渡
         BluetoothToolsMainActivity.currentFragment = (Integer) linearLayout.getTag();
         viewPager.setCurrentItem(BluetoothToolsMainActivity.currentFragment, false);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            myFinish();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }
 

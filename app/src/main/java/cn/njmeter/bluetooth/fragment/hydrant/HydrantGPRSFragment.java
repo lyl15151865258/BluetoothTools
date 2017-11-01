@@ -23,6 +23,8 @@ import cn.njmeter.bluetooth.bean.TcpUdpParam;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
 import cn.njmeter.bluetooth.utils.CommonUtils;
+import cn.njmeter.bluetooth.utils.MathUtils;
+import cn.njmeter.bluetooth.utils.RegexUtils;
 
 public class HydrantGPRSFragment extends BaseFragment implements View.OnClickListener {
 
@@ -39,14 +41,8 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
     Button btn_read_imei;
     @BindView(R.id.radioTcpServer)
     RadioButton radioTcpServer;
-    @BindView(R.id.editTextIP1)
-    EditText editTextIP1;
-    @BindView(R.id.editTextIP2)
-    EditText editTextIP2;
-    @BindView(R.id.editTextIP3)
-    EditText editTextIP3;
-    @BindView(R.id.editTextIP4)
-    EditText editTextIP4;
+    @BindView(R.id.et_ip)
+    EditText et_ip;
     @BindView(R.id.editTextPort)
     EditText editTextPort;
     @BindView(R.id.btnSetComm)
@@ -55,6 +51,8 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
     Button btnReadComm;
     @BindView(R.id.btnGprsDefault)
     Button btnGprsDefault;
+    @BindView(R.id.btnDomainNameDefault)
+    Button btnDomainNameDefault;
 
     static boolean autoRefreshDateTime;
 
@@ -123,7 +121,7 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
                     BluetoothToolsMainActivity.data = "";
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    CommonUtils.showToast(context,"请输入11位IMEI号");
+                    CommonUtils.showToast(context, "请输入11位IMEI号");
                 }
 
             }
@@ -142,10 +140,13 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
 
             @Override
             public void onClick(View arg0) {
-                editTextIP1.setText("58");
-                editTextIP2.setText("240");
-                editTextIP3.setText("47");
-                editTextIP4.setText("50");
+                et_ip.setText("58.240.47.50");
+            }
+        });
+        btnDomainNameDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                et_ip.setText("www.metter.cn");
             }
         });
         btnSetComm.setOnClickListener(new View.OnClickListener() {
@@ -156,27 +157,28 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
                 //7B89003D30303030303030303030306848111111110011110703C11E0122544350222C2235382E3234302E34372E3530222C2235303034220D2361167B
                 StringBuilder sb = new StringBuilder();
                 sb.append("7B89003D30303030303030303030306848111111110011110703C11E01");
-                TcpUdpParam param = new TcpUdpParam();
+                StringBuilder param = new StringBuilder();
                 if (radioTcpServer.isChecked()) {
-                    param.setMode("TCP");
+                    param.append("\"TCP\"");
                 } else {
-                    param.setMode("UDP");
+                    param.append("\"UDP\"");
                 }
-                param.setIp1(editTextIP1.getText().toString().replace(" ", ""));
-                param.setIp2(editTextIP2.getText().toString().replace(" ", ""));
-                param.setIp3(editTextIP3.getText().toString().replace(" ", ""));
-                param.setIp4(editTextIP4.getText().toString().replace(" ", ""));
-                param.setPort(editTextPort.getText().toString().replace(" ", ""));
-                // BluetoothPrinterMainActivity.writeData(tx);
-                if (param.isIsvalid()) {
-                    sb.append(getHexStr(param));
+                param.append(",");
+                param.append("\"");
+                String ip = et_ip.getText().toString();
+                param.append(ip);
+                param.append("\",\"");
+                String port = editTextPort.getText().toString();
+                param.append(port);
+                param.append("\"");
+                if (!RegexUtils.checkPort(port)) {
+                    CommonUtils.showToast(context, "端口号输入错误");
+                    return;
+                }
+                if (RegexUtils.checkIpAddress(ip) || RegexUtils.checkDomainName(ip)) {
+                    sb.append(MathUtils.getHexStr(param.toString()));
                     sb.append("0D23");
-
                     String checkStr = sb.substring(sb.indexOf("68"));
-                    int len = checkStr.length() - 20;
-                    //StringBuffer sbf = new StringBuffer(checkStr);
-                    // sb.replace(50, 52, len<17?("0"+Integer.toHexString(len)):(Integer.toHexString(len)));
-                    checkStr = sb.substring(sb.indexOf("68"));
                     int checksum = getCheckSum(checkStr);
                     String cs = Integer.toHexString(checksum);
                     sb.append(cs.substring(cs.length() - 2));
@@ -185,7 +187,7 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
                     BluetoothToolsMainActivity.data = "";
                     BluetoothToolsMainActivity.writeData(sb.toString());
                 } else {
-                    CommonUtils.showToast(context,"IP或端口输入错误");
+                    CommonUtils.showToast(context, "IP地址或域名输入错误");
                 }
             }
         });
@@ -203,17 +205,6 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
 
     }
 
-    public String getHexStr(TcpUdpParam param) {
-        String strtcp = param.toString();
-        byte[] tcpbytes = strtcp.getBytes();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tcpbytes.length; i++) {
-            sb.append(Integer.toHexString(tcpbytes[i]));
-        }
-        System.out.println(sb.toString().toUpperCase());
-        return sb.toString().toUpperCase();
-    }
-
     public int getCheckSum(String param) {
         StringBuilder sb = new StringBuilder();
         int res = 0;
@@ -221,21 +212,6 @@ public class HydrantGPRSFragment extends BaseFragment implements View.OnClickLis
             res += AnalysisUtils.HexS2ToInt(param.substring(i * 2, i * 2 + 2));
         }
         return res;
-    }
-
-    //位数不够补零
-    public static String addZeroForNum(String str, int strLength) {
-        int strLen = str.length();
-        if (strLen < strLength) {
-            while (strLen < strLength) {
-                StringBuilder sb = new StringBuilder(str);
-                sb.insert(0, "0");//左补0
-//		    	sb.insert(strLen,"0");//右补0
-                str = sb.toString();
-                strLen = str.length();
-            }
-        }
-        return str;
     }
 
     @Override

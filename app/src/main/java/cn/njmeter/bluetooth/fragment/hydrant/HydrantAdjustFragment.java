@@ -40,7 +40,7 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
     private EditText et_meterId, et_qn_1, et_qn_3, et_qn2_1, et_qn2_3, et_qn1_1, et_qn1_3, et_qmin_1, et_qmin_3;
     private TextView tv_qn_2, tv_qn2_2, tv_qn1_2, tv_qmin_2;
     private TextView tv_consumption_positive, tv_consumption_reverse;
-    private EditText et_consumption_positive, et_consumption_reverse;
+    private EditText et_consumption_positive, et_consumption_reverse, et_set_common_pressure;
     private String meterId = "";
     private static String productType = ProductType.HYDRANT;
     public Context context;
@@ -82,37 +82,45 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
         //监听软键盘，滚动ScrollView以适应输入框
         getActivity().getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 
-        Button btn_read_parameter, btn_factory_reset, btn_set_flow_coefficient, btn_adjust_consumption, btn_read_flow, btn_clear_flow;
-        scrollView_root = view.findViewById(R.id.scrollView_root);
-        et_meterId = view.findViewById(R.id.et_meterId);
-        et_qn_1 = view.findViewById(R.id.et_qn_1);
-        et_qn_3 = view.findViewById(R.id.et_qn_3);
-        et_qn2_1 = view.findViewById(R.id.et_qn2_1);
-        et_qn2_3 = view.findViewById(R.id.et_qn2_3);
-        et_qn1_1 = view.findViewById(R.id.et_qn1_1);
-        et_qn1_3 = view.findViewById(R.id.et_qn1_3);
-        et_qmin_1 = view.findViewById(R.id.et_qmin_1);
-        et_qmin_3 = view.findViewById(R.id.et_qmin_3);
-        et_consumption_positive = view.findViewById(R.id.et_consumption_positive);
-        et_consumption_reverse = view.findViewById(R.id.et_consumption_reverse);
-        tv_qn_2 = view.findViewById(R.id.tv_qn_2);
-        tv_qn2_2 = view.findViewById(R.id.tv_qn2_2);
-        tv_qn1_2 = view.findViewById(R.id.tv_qn1_2);
-        tv_qmin_2 = view.findViewById(R.id.tv_qmin_2);
-        tv_consumption_positive = view.findViewById(R.id.tv_flow_positive);
-        tv_consumption_reverse = view.findViewById(R.id.tv_flow_reserve);
-        btn_read_parameter = view.findViewById(R.id.btn_read_parameter);
-        btn_factory_reset = view.findViewById(R.id.btn_factory_reset);
-        btn_set_flow_coefficient = view.findViewById(R.id.btn_set_flow_coefficient);
-        btn_adjust_consumption = view.findViewById(R.id.btn_adjust_consumption);
-        btn_read_flow = view.findViewById(R.id.btn_read_flow);
-        btn_clear_flow = view.findViewById(R.id.btn_clear_flow);
+        Button btn_read_parameter, btn_factory_reset, btn_set_flow_coefficient, btn_adjust_consumption, btn_read_flow, btn_clear_flow,
+                btn_read_pressure_calibration, btn_set_zero_point_calibration, btn_set_normal_point_calibration;
+        scrollView_root = (ScrollView) view.findViewById(R.id.scrollView_root);
+        et_meterId = (EditText) view.findViewById(R.id.et_meterId);
+        et_qn_1 = (EditText) view.findViewById(R.id.et_qn_1);
+        et_qn_3 = (EditText) view.findViewById(R.id.et_qn_3);
+        et_qn2_1 = (EditText) view.findViewById(R.id.et_qn2_1);
+        et_qn2_3 = (EditText) view.findViewById(R.id.et_qn2_3);
+        et_qn1_1 = (EditText) view.findViewById(R.id.et_qn1_1);
+        et_qn1_3 = (EditText) view.findViewById(R.id.et_qn1_3);
+        et_qmin_1 = (EditText) view.findViewById(R.id.et_qmin_1);
+        et_qmin_3 = (EditText) view.findViewById(R.id.et_qmin_3);
+        et_consumption_positive = (EditText) view.findViewById(R.id.et_consumption_positive);
+        et_consumption_reverse = (EditText) view.findViewById(R.id.et_consumption_reverse);
+        et_set_common_pressure = (EditText) view.findViewById(R.id.et_set_common_pressure);
+        tv_qn_2 = (TextView) view.findViewById(R.id.tv_qn_2);
+        tv_qn2_2 = (TextView) view.findViewById(R.id.tv_qn2_2);
+        tv_qn1_2 = (TextView) view.findViewById(R.id.tv_qn1_2);
+        tv_qmin_2 = (TextView) view.findViewById(R.id.tv_qmin_2);
+        tv_consumption_positive = (TextView) view.findViewById(R.id.tv_flow_positive);
+        tv_consumption_reverse = (TextView) view.findViewById(R.id.tv_flow_reserve);
+        btn_read_parameter = (Button) view.findViewById(R.id.btn_read_parameter);
+        btn_factory_reset = (Button) view.findViewById(R.id.btn_factory_reset);
+        btn_set_flow_coefficient = (Button) view.findViewById(R.id.btn_set_flow_coefficient);
+        btn_adjust_consumption = (Button) view.findViewById(R.id.btn_adjust_consumption);
+        btn_read_flow = (Button) view.findViewById(R.id.btn_read_flow);
+        btn_clear_flow = (Button) view.findViewById(R.id.btn_clear_flow);
+        btn_read_pressure_calibration = (Button) view.findViewById(R.id.btn_read_pressure_calibration);
+        btn_set_zero_point_calibration = (Button) view.findViewById(R.id.btn_set_zero_point_calibration);
+        btn_set_normal_point_calibration = (Button) view.findViewById(R.id.btn_set_normal_point_calibration);
         btn_adjust_consumption.setOnClickListener(onClickListener);
         btn_factory_reset.setOnClickListener(onClickListener);
         btn_read_parameter.setOnClickListener(onClickListener);
         btn_set_flow_coefficient.setOnClickListener(onClickListener);
         btn_clear_flow.setOnClickListener(onClickListener);
         btn_read_flow.setOnClickListener(onClickListener);
+        btn_read_pressure_calibration.setOnClickListener(onClickListener);
+        btn_set_zero_point_calibration.setOnClickListener(onClickListener);
+        btn_set_normal_point_calibration.setOnClickListener(onClickListener);
 
         setCharSequence(et_qn_1.getText());
         setCharSequence(et_qn2_1.getText());
@@ -279,6 +287,64 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
             public void afterTextChanged(Editable s) {
             }
         });
+
+        et_set_common_pressure.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //限制小数点后面最多两位
+                if (s.toString().contains(".")) {
+                    //限制小数位数不大于2个
+                    if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                        s = s.toString().subSequence(0, s.toString().indexOf(".") + 3);
+                        et_set_common_pressure.setText(s);
+                        //设置光标在末尾
+                        et_set_common_pressure.setSelection(s.length());
+                        CommonUtils.showToast(context, "最多两位小数");
+                    }
+                    //如果输入的值超过范围（0.00＜X≤10.00）弹出提示
+                    if (s.length() - 1 - s.toString().indexOf(".") == 1 || s.length() - 1 - s.toString().indexOf(".") == 2) {
+                        if (et_set_common_pressure.getText().toString().equals("0.00") || Float.valueOf(et_set_common_pressure.getText().toString()) > 10.00f) {
+                            //去掉刚输入的数字
+                            s = s.toString().subSequence(0, s.length() - 1);
+                            et_set_common_pressure.setText(s);
+                            //设置光标在末尾
+                            et_set_common_pressure.setSelection(s.length());
+                            CommonUtils.showToast(context, "设定范围0.00＜X≤10.00");
+                        }
+                    }
+                } else if (!TextUtils.isEmpty(s.toString())) {
+                    if (Integer.valueOf(et_set_common_pressure.getText().toString()) > 10) {
+                        s = s.toString().subSequence(0, s.length() - 1);
+                        et_set_common_pressure.setText(s);
+                        //设置光标在末尾
+                        et_set_common_pressure.setSelection(s.length());
+                        CommonUtils.showToast(context, "设定范围0.00＜X≤10.00");
+                    }
+                }
+                //如果直接输入小数点，前面自动补0
+                if (s.toString().trim().equals(".")) {
+                    s = "0" + s;
+                    et_set_common_pressure.setText(s);
+                    et_set_common_pressure.setSelection(2);
+                }
+                //除了小数开头不能为0，而且开头不允许连续出现0
+                if (s.toString().startsWith("0") && s.toString().trim().length() > 1) {
+                    if (!s.toString().substring(1, 2).equals(".")) {
+                        et_set_common_pressure.setText(s.subSequence(0, 1));
+                        et_set_common_pressure.setSelection(1);
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private OnMultiClickListener onClickListener = new OnMultiClickListener() {
@@ -334,19 +400,24 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
                                 .setMessage("确定要恢复出厂值吗？")
                                 .setPositiveButton("确定",
                                         new DialogInterface.OnClickListener() {
+                                            @Override
                                             public void onClick(DialogInterface dialog, int whichButton) {
                                                 int xi = 0, yi = 0, zi = 0, oi = 0;
                                                 SharedPreferences sharedPreferences = context.getSharedPreferences("setQnParam", Context.MODE_PRIVATE);
                                                 Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
                                                 for (Map.Entry<String, String> entry : map.entrySet()) {
-                                                    if (entry.getKey().endsWith(meterId + "qn_2"))
+                                                    if (entry.getKey().endsWith(meterId + "qn_2")) {
                                                         xi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qn2_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qn2_2")) {
                                                         yi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qn1_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qn1_2")) {
                                                         zi = Integer.parseInt(entry.getValue());
-                                                    if (entry.getKey().endsWith(meterId + "qmin_2"))
+                                                    }
+                                                    if (entry.getKey().endsWith(meterId + "qmin_2")) {
                                                         oi = Integer.parseInt(entry.getValue());
+                                                    }
                                                 }
 
                                                 if (xi != 0 && yi != 0 && zi != 0 && oi != 0) {
@@ -383,6 +454,7 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
 
                                             }
                                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
                                     public void onClick(DialogInterface dialog, int whichButton) {
 
                                     }
@@ -420,6 +492,43 @@ public class HydrantAdjustFragment extends BaseFragment implements View.OnClickL
                         CommonUtils.showToast(context, "请先读取流量");
                     }
                     number = "68" + productType + meterId + "0011113A03901F00";
+                    checkCode = AnalysisUtils.getCSSum(number, 0);
+                    command = number + checkCode + "16";
+                    BluetoothToolsMainActivity.writeData(command);
+                    break;
+                case R.id.btn_read_pressure_calibration:
+                    //读取压力标定
+                    number = "6848111111110011113B03805500";
+                    checkCode = AnalysisUtils.getCSSum(number, 0);
+                    command = number + checkCode + "16";
+                    BluetoothToolsMainActivity.writeData(command);
+                    break;
+                case R.id.btn_set_normal_point_calibration:
+                    //常用点标定
+                    if (TextUtils.isEmpty(et_set_common_pressure.getText())) {
+                        CommonUtils.showToast(context, "请先输入设定值");
+                        return;
+                    } else if (et_set_common_pressure.getText().toString().contains(".")) {
+                        if (et_set_common_pressure.getText().toString().length() - 1 - et_set_common_pressure.getText().toString().indexOf(".") != 2) {
+                            CommonUtils.showToast(context, "设定值必须为两位小数");
+                            return;
+                        }
+                    } else {
+                        CommonUtils.showToast(context, "设定值必须为两位小数");
+                        return;
+                    }
+                    int normal_point_calibration = Math.round(Float.valueOf(et_set_common_pressure.getText().toString()) * 100000);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("6848111111110011113B07805401");
+                    sb.append(addZeroForNum(String.valueOf(Integer.toHexString(normal_point_calibration)), 8));
+                    number = sb.toString();
+                    checkCode = AnalysisUtils.getCSSum(number, 0);
+                    command = number + checkCode + "16";
+                    BluetoothToolsMainActivity.writeData(command);
+                    break;
+                case R.id.btn_set_zero_point_calibration:
+                    //零点标定
+                    number = "6848111111110011113B07805400" + "00000000";
                     checkCode = AnalysisUtils.getCSSum(number, 0);
                     command = number + checkCode + "16";
                     BluetoothToolsMainActivity.writeData(command);

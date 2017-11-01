@@ -153,77 +153,89 @@ public class GprsSettingFragment extends BaseFragment implements View.OnClickLis
                 sb.append("684811111111001111150F877800");
                 //短连接上传周期
                 int cycle_upload_shortConnection = set_cycle_upload_shortConnection.getSelectedItemPosition();
-                if (hours1_int[cycle_upload_shortConnection] < 16)
+                if (hours1_int[cycle_upload_shortConnection] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours1_int[cycle_upload_shortConnection]));
 
                 //短连接时间点
                 int time_shortConnection = set_time_shortConnection.getSelectedItemPosition();
-                if (hours2_int[time_shortConnection] < 16)
+                if (hours2_int[time_shortConnection] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours2_int[time_shortConnection]));
 
                 //短连接抄表间隔
                 int interval_readMeter_shortConnection = set_interval_readMeter_shortConnection.getSelectedItemPosition();
-                if (minutes4_int[interval_readMeter_shortConnection] < 16)
+                if (minutes4_int[interval_readMeter_shortConnection] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(minutes4_int[interval_readMeter_shortConnection]));
 
                 //外供电抄表间隔
                 int interval_readMeter_external_power_supply = set_interval_readMeter_external_power_supply.getSelectedItemPosition();
-                if (minutes2_int[interval_readMeter_external_power_supply] < 16)
+                if (minutes2_int[interval_readMeter_external_power_supply] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(minutes2_int[interval_readMeter_external_power_supply]));
 
                 //电池供电常在线抄表间隔（长连接长模式）
                 int interval_longMode_longConnection = set_interval_longMode_longConnection.getSelectedItemPosition();
-                if (minutes5_int[interval_longMode_longConnection] < 16)
+                if (minutes5_int[interval_longMode_longConnection] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(minutes5_int[interval_longMode_longConnection]));
 
                 //采集终端模式
                 int spinner_mode = set_spinner_mode.getSelectedItemPosition();
-                if (collector_mode_int[spinner_mode] < 16)
+                if (collector_mode_int[spinner_mode] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(collector_mode_int[spinner_mode]));
 
                 //电池供电短在线状态间隔（长连接短模式）
                 int interval_shortMode_longConnection = get_interval_shortMode_longConnection.getSelectedItemPosition();
-                if (minutes1_int[interval_shortMode_longConnection] < 16)
+                if (minutes1_int[interval_shortMode_longConnection] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(minutes1_int[interval_shortMode_longConnection]));
 
                 //分段使能
                 int enabled_batch_mode = set_enabled_batch_mode.getSelectedItemPosition();
-                if (enabled_batch_mode_int[enabled_batch_mode] < 16)
+                if (enabled_batch_mode_int[enabled_batch_mode] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(enabled_batch_mode_int[enabled_batch_mode]));
 
                 //上午起始时间点
                 int startTime_morning = set_startTime_morning.getSelectedItemPosition();
-                if (hours2_int[startTime_morning] < 16)
+                if (hours2_int[startTime_morning] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours2_int[startTime_morning]));
 
                 //上午结束时间点
                 int endTime_morning = set_endTime_morning.getSelectedItemPosition();
-                if (hours2_int[endTime_morning] < 16)
+                if (hours2_int[endTime_morning] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours2_int[endTime_morning]));
 
                 //下午起始时间点
                 int startTime_afternoon = set_startTime_afternoon.getSelectedItemPosition();
-                if (hours2_int[startTime_afternoon] < 16)
+                if (hours2_int[startTime_afternoon] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours2_int[startTime_afternoon]));
 
                 //下午结束时间点
                 int endTime_afternoon = set_endTime_afternoon.getSelectedItemPosition();
-                if (hours2_int[endTime_afternoon] < 16)
+                if (hours2_int[endTime_afternoon] < 16) {
                     sb.append("0");
+                }
                 sb.append(Integer.toHexString(hours2_int[endTime_afternoon]));
 
-                String cs = AnalysisUtils.getCSSum(sb.toString(),0);
+                String cs = AnalysisUtils.getCSSum(sb.toString(), 0);
                 sb.append(cs.substring(cs.length() - 2));
                 sb.append("167B");
                 stringBuilder.append(sb.toString());

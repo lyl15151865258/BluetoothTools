@@ -56,6 +56,7 @@ import cn.njmeter.bluetooth.bean.ParameterProtocol;
 import cn.njmeter.bluetooth.bean.Protocol;
 import cn.njmeter.bluetooth.bean.SSumHeat;
 import cn.njmeter.bluetooth.bean.TcpUdpParam;
+import cn.njmeter.bluetooth.constant.Constant;
 import cn.njmeter.bluetooth.constant.ProductType;
 import cn.njmeter.bluetooth.fragment.collector.GprsAddDeleteMeterFragment;
 import cn.njmeter.bluetooth.fragment.collector.GprsNormalFragment;
@@ -74,6 +75,7 @@ import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterAdjustFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterDataFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterLcdFragment;
 import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterParameterFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterSetPressureFragment;
 import cn.njmeter.bluetooth.interfaces.OnMultiItemClickListener;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
 import cn.njmeter.bluetooth.utils.BluetoothAnalysisUtils;
@@ -112,6 +114,7 @@ public class BluetoothToolsMainActivity extends BaseActivity {
 
     private MyHandler myHandler = new MyHandler(this);
     private ConnectBluetoothDialog connectBluetoothDialog;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -789,6 +792,39 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                                 default:
                                     break;
                             }
+                        } else if (subFragment instanceof WaterMeterSetPressureFragment) {
+                            WaterMeterSetPressureFragment waterMeterSetPressureFragment = (WaterMeterSetPressureFragment) subFragment;
+                            View view = waterMeterSetPressureFragment.getView();
+                            if (view != null) {
+                                switch (BluetoothAnalysisUtils.analyzeData(data, protocol, ssumheat, mbus, parameterprotocol)) {
+                                    case ProductType.WATER_METER_SET_PRESSURE_SUCCESS:
+                                        theActivity.showToast("标定成功");
+                                        BluetoothToolsMainActivity.data = "";
+                                        break;
+                                    case ProductType.WATER_METER_SET_PRESSURE_FAIL:
+                                        theActivity.showToast("标定失败");
+                                        BluetoothToolsMainActivity.data = "";
+                                        break;
+                                    case ProductType.WATER_METER_READ_PRESSURE:
+                                        //零点AD采样值
+                                        int samplingValueZeroPoint = AnalysisUtils.HexS8ToInt(data.substring(26, 34));
+                                        TextView tvSamplingValueZeroPoint = view.findViewById(R.id.tv_sampling_value_zero_point);
+                                        tvSamplingValueZeroPoint.setText(String.valueOf(samplingValueZeroPoint));
+                                        //常用点AD采样值
+                                        int samplingValueCommonPoint = AnalysisUtils.HexS8ToInt(data.substring(42, 50));
+                                        TextView tvSamplingValueCommonPoint = view.findViewById(R.id.tv_sampling_value_common_point);
+                                        tvSamplingValueCommonPoint.setText(String.valueOf(samplingValueCommonPoint));
+                                        //当前常用点
+                                        float currentCommonPoint = AnalysisUtils.HexS8ToInt(data.substring(34, 42)) / 100000f;
+                                        TextView tvCurrentCommonPoint = view.findViewById(R.id.tv_current_common_point);
+                                        tvCurrentCommonPoint.setText("" + new DecimalFormat("##0.00").format(currentCommonPoint) + "bar");
+                                        theActivity.showToast("读取压力标定成功");
+                                        BluetoothToolsMainActivity.data = "";
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
                         }
                     } else if (currentActivity instanceof HeatMeterSettingActivity) {
                         //热表操作页面
@@ -1228,118 +1264,164 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                         } else if (subFragment instanceof HydrantAdjustFragment) {
                             //消火栓系数调整页面
                             HydrantAdjustFragment hydrantAdjustFragment = (HydrantAdjustFragment) subFragment;
-                            switch (BluetoothAnalysisUtils.analyzeData(data, protocol, ssumheat, mbus, parameterprotocol)) {
-                                //读取消火栓内部参数
-                                case ProductType.HYDRANT_READ_METER_INTER_PARAMETER:
-                                    EditText et_meterId = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_meterId);
-                                    EditText et_qn_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn_1);
-                                    EditText et_qn2_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn2_1);
-                                    EditText et_qn1_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn1_1);
-                                    EditText et_qmin_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qmin_1);
-                                    TextView tv_qn_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn_2);
-                                    TextView tv_qn2_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn2_2);
-                                    TextView tv_qn1_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn1_2);
-                                    TextView tv_qmin_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qmin_2);
-                                    EditText et_qn_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn_3);
-                                    EditText et_qn2_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn2_3);
-                                    EditText et_qn1_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn1_3);
-                                    EditText et_qmin_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qmin_3);
-                                    et_meterId.setText(parameterprotocol.getMeterid());
-                                    double qnerr, qn2err, qn1err, qminerr, qnold, qn2old, qn1old, qminold, qnnew, qn2new, qn1new, qminnew = 0;
-                                    try {
-                                        qnerr = Double.valueOf(et_qn_1.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qnerr = 0;
+                            View view = hydrantAdjustFragment.getView();
+                            if (view != null) {
+                                if (data == null || "".equals(data)) {
+                                    return;
+                                } else {
+                                    System.out.println("data:" + data);
+                                    int start7B = data.indexOf("7B");
+                                    if (start7B != -1) {
+                                        String newData = data.substring(start7B + 2);
+                                        System.out.println("newData:" + newData);
+                                        int end7B = newData.lastIndexOf("7B");
+                                        if (end7B != -1) {
+                                            int length = AnalysisUtils.HexS2ToInt(newData.substring(4, 6));
+                                            String aframe = newData.substring(0, end7B);
+                                            if (aframe.length() == 2 * (length - 2)) {
+                                                System.out.println("aframe:" + aframe);
+                                                StringBuilder builder = new StringBuilder();
+                                                builder.append(aframe);
+                                                if (builder.indexOf("BB078054") == 46) {
+                                                    theActivity.showToast("标定成功");
+                                                    BluetoothToolsMainActivity.data = "";
+                                                } else if (builder.indexOf("7B078054") == 46) {
+                                                    theActivity.showToast("标定失败");
+                                                    BluetoothToolsMainActivity.data = "";
+                                                } else if (builder.indexOf("BB0E8055") == 46) {
+                                                    //零点AD采样值
+                                                    int samplingValueZeroPoint = AnalysisUtils.HexS8ToInt(builder.substring(54, 62));
+                                                    TextView tvSamplingValueZeroPoint = view.findViewById(R.id.tv_sampling_value_zero_point);
+                                                    tvSamplingValueZeroPoint.setText(String.valueOf(samplingValueZeroPoint));
+                                                    //常用点AD采样值
+                                                    int samplingValueCommonPoint = AnalysisUtils.HexS8ToInt(builder.substring(70, 78));
+                                                    TextView tvSamplingValueCommonPoint = view.findViewById(R.id.tv_sampling_value_common_point);
+                                                    tvSamplingValueCommonPoint.setText(String.valueOf(samplingValueCommonPoint));
+                                                    //当前常用点
+                                                    float currentCommonPoint = AnalysisUtils.HexS8ToInt(builder.substring(62, 70)) / 100000f;
+                                                    TextView tvCurrentCommonPoint = view.findViewById(R.id.tv_current_common_point);
+                                                    tvCurrentCommonPoint.setText("" + new DecimalFormat("##0.00").format(currentCommonPoint) + "bar");
+                                                    theActivity.showToast("读取压力标定成功");
+                                                    BluetoothToolsMainActivity.data = "";
+                                                }
+                                            }
+                                        }
                                     }
-                                    try {
-                                        qn2err = Double.valueOf(et_qn2_1.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qn2err = 0;
-                                    }
-                                    try {
-                                        qn1err = Double.valueOf(et_qn1_1.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qn1err = 0;
-                                    }
-                                    try {
-                                        qminerr = Double.valueOf(et_qmin_1.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qminerr = 0;
-                                    }
-                                    tv_qn_2.setText(parameterprotocol.getQnx());
-                                    tv_qn2_2.setText(parameterprotocol.getQn2x());
-                                    tv_qn1_2.setText(parameterprotocol.getQn1x());
-                                    tv_qmin_2.setText(parameterprotocol.getQminx());
-                                    SharedPreferences sharedPreferences = context.getSharedPreferences("setQnParam", Context.MODE_PRIVATE);
-                                    String nMeterid = parameterprotocol.getMeterid();
+                                }
+                                switch (BluetoothAnalysisUtils.analyzeData(data, protocol, ssumheat, mbus, parameterprotocol)) {
+                                    //读取消火栓内部参数
+                                    case ProductType.HYDRANT_READ_METER_INTER_PARAMETER:
+                                        EditText et_meterId = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_meterId);
+                                        EditText et_qn_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn_1);
+                                        EditText et_qn2_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn2_1);
+                                        EditText et_qn1_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn1_1);
+                                        EditText et_qmin_1 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qmin_1);
+                                        TextView tv_qn_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn_2);
+                                        TextView tv_qn2_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn2_2);
+                                        TextView tv_qn1_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qn1_2);
+                                        TextView tv_qmin_2 = (TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_qmin_2);
+                                        EditText et_qn_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn_3);
+                                        EditText et_qn2_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn2_3);
+                                        EditText et_qn1_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qn1_3);
+                                        EditText et_qmin_3 = (EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_qmin_3);
+                                        et_meterId.setText(parameterprotocol.getMeterid());
+                                        double qnerr, qn2err, qn1err, qminerr, qnold, qn2old, qn1old, qminold, qnnew, qn2new, qn1new, qminnew = 0;
+                                        try {
+                                            qnerr = Double.valueOf(et_qn_1.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qnerr = 0;
+                                        }
+                                        try {
+                                            qn2err = Double.valueOf(et_qn2_1.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qn2err = 0;
+                                        }
+                                        try {
+                                            qn1err = Double.valueOf(et_qn1_1.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qn1err = 0;
+                                        }
+                                        try {
+                                            qminerr = Double.valueOf(et_qmin_1.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qminerr = 0;
+                                        }
+                                        tv_qn_2.setText(parameterprotocol.getQnx());
+                                        tv_qn2_2.setText(parameterprotocol.getQn2x());
+                                        tv_qn1_2.setText(parameterprotocol.getQn1x());
+                                        tv_qmin_2.setText(parameterprotocol.getQminx());
+                                        SharedPreferences sharedPreferences = context.getSharedPreferences("setQnParam", Context.MODE_PRIVATE);
+                                        String nMeterid = parameterprotocol.getMeterid();
 
-                                    Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
-                                    if (!map.keySet().contains(nMeterid + "qn_2") &&
-                                            !map.keySet().contains(nMeterid + "qn1_2") &&
-                                            !map.keySet().contains(nMeterid + "qn2_2") &&
-                                            !map.keySet().contains(nMeterid + "qmin_2")) {
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString(nMeterid + "qn_2", parameterprotocol.getQnx());
-                                        editor.putString(nMeterid + "qn1_2", parameterprotocol.getQn1x());
-                                        editor.putString(nMeterid + "qn2_2", parameterprotocol.getQn2x());
-                                        editor.putString(nMeterid + "qmin_2", parameterprotocol.getQminx());
-                                        editor.apply();//提交修改
-                                    }
+                                        Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
+                                        if (!map.keySet().contains(nMeterid + "qn_2") &&
+                                                !map.keySet().contains(nMeterid + "qn1_2") &&
+                                                !map.keySet().contains(nMeterid + "qn2_2") &&
+                                                !map.keySet().contains(nMeterid + "qmin_2")) {
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString(nMeterid + "qn_2", parameterprotocol.getQnx());
+                                            editor.putString(nMeterid + "qn1_2", parameterprotocol.getQn1x());
+                                            editor.putString(nMeterid + "qn2_2", parameterprotocol.getQn2x());
+                                            editor.putString(nMeterid + "qmin_2", parameterprotocol.getQminx());
+                                            editor.apply();//提交修改
+                                        }
 
-                                    try {
-                                        qnold = Double.valueOf(tv_qn_2.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qnold = 0;
-                                    }
-                                    try {
-                                        qn2old = Double.valueOf(tv_qn2_2.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qn2old = 0;
-                                    }
-                                    try {
-                                        qn1old = Double.valueOf(tv_qn1_2.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qn1old = 0;
-                                    }
-                                    try {
-                                        qminold = Double.valueOf(tv_qmin_2.getText().toString().replace(" ", ""));
-                                    } catch (Exception e) {
-                                        qminold = 0;
-                                    }
-                                    qnnew = qnold * (1 + qnerr * 0.01);
-                                    qn2new = qn2old * (1 + qn2err * 0.01);
-                                    qn1new = qn1old * (1 + qn1err * 0.01);
-                                    qminnew = qminold * (1 + qminerr * 0.01);
-                                    et_qn_3.setText(String.valueOf((int) qnnew));
-                                    et_qn2_3.setText(String.valueOf((int) qn2new));
-                                    et_qn1_3.setText(String.valueOf((int) qn1new));
-                                    et_qmin_3.setText(String.valueOf((int) qminnew));
-                                    CommonUtils.showToast(context, "读取流量系数成功");
-                                    BluetoothToolsMainActivity.data = "";
-                                    break;
-                                case ProductType.HYDRANT_READ_METER_DATA:
-                                    //读取消火栓流量
-                                    ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_meterId)).setText(data.substring(4, 12));
-                                    double flowUnit_positive = AnalysisUtils.getFlowMultiple(data.substring(36, 38));                           //正向流量单位
-                                    double flowUnit_reserve = AnalysisUtils.getFlowMultiple(data.substring(46, 48));                            //反向流量单位
-                                    HydrantAdjustFragment.flowUnit_positive = flowUnit_positive;
-                                    HydrantAdjustFragment.flowUnit_reserve = flowUnit_reserve;
-                                    String cumulative_flow = format(changeCode(data.substring(28, 36)), flowUnit_positive);                 //正向流量
-                                    String reverse_cumulative_flow = format(changeCode(data.substring(38, 46)), flowUnit_reserve);          //反向流量
-                                    ((TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_flow_positive)).setText(cumulative_flow);
-                                    ((TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_flow_reserve)).setText(reverse_cumulative_flow);
-                                    ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_consumption_positive)).setText("");
-                                    ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_consumption_reverse)).setText("");
-                                    CommonUtils.showToast(context, "读取流量成功");
-                                    BluetoothToolsMainActivity.data = "";
-                                    break;
-                                default:
-                                    break;
+                                        try {
+                                            qnold = Double.valueOf(tv_qn_2.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qnold = 0;
+                                        }
+                                        try {
+                                            qn2old = Double.valueOf(tv_qn2_2.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qn2old = 0;
+                                        }
+                                        try {
+                                            qn1old = Double.valueOf(tv_qn1_2.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qn1old = 0;
+                                        }
+                                        try {
+                                            qminold = Double.valueOf(tv_qmin_2.getText().toString().replace(" ", ""));
+                                        } catch (Exception e) {
+                                            qminold = 0;
+                                        }
+                                        qnnew = qnold * (1 + qnerr * 0.01);
+                                        qn2new = qn2old * (1 + qn2err * 0.01);
+                                        qn1new = qn1old * (1 + qn1err * 0.01);
+                                        qminnew = qminold * (1 + qminerr * 0.01);
+                                        et_qn_3.setText(String.valueOf((int) qnnew));
+                                        et_qn2_3.setText(String.valueOf((int) qn2new));
+                                        et_qn1_3.setText(String.valueOf((int) qn1new));
+                                        et_qmin_3.setText(String.valueOf((int) qminnew));
+                                        CommonUtils.showToast(context, "读取流量系数成功");
+                                        BluetoothToolsMainActivity.data = "";
+                                        break;
+                                    case ProductType.HYDRANT_READ_METER_DATA:
+                                        //读取消火栓流量
+                                        ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_meterId)).setText(data.substring(4, 12));
+                                        double flowUnit_positive = AnalysisUtils.getFlowMultiple(data.substring(36, 38));                           //正向流量单位
+                                        double flowUnit_reserve = AnalysisUtils.getFlowMultiple(data.substring(46, 48));                            //反向流量单位
+                                        HydrantAdjustFragment.flowUnit_positive = flowUnit_positive;
+                                        HydrantAdjustFragment.flowUnit_reserve = flowUnit_reserve;
+                                        String cumulative_flow = format(changeCode(data.substring(28, 36)), flowUnit_positive);                 //正向流量
+                                        String reverse_cumulative_flow = format(changeCode(data.substring(38, 46)), flowUnit_reserve);          //反向流量
+                                        ((TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_flow_positive)).setText(cumulative_flow);
+                                        ((TextView) hydrantAdjustFragment.getView().findViewById(R.id.tv_flow_reserve)).setText(reverse_cumulative_flow);
+                                        ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_consumption_positive)).setText("");
+                                        ((EditText) hydrantAdjustFragment.getView().findViewById(R.id.et_consumption_reverse)).setText("");
+                                        CommonUtils.showToast(context, "读取流量成功");
+                                        BluetoothToolsMainActivity.data = "";
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         } else if (subFragment instanceof HydrantGPRSFragment) {
                             HydrantGPRSFragment hydrantGPRSFragment = (HydrantGPRSFragment) subFragment;
-                            if (data == null || data.equals(""))
+                            if (data == null || data.equals("")) {
                                 return;
+                            }
                             if (data.contains("4D4F4449465920495031202020204F4B")) {
                                 (hydrantGPRSFragment.getView().findViewById(R.id.btnReadComm)).performClick();
                                 CommonUtils.showToast(context, "修改网络参数参数成功");
@@ -1430,8 +1512,9 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                                             String strport = arrtcpip[2];
                                             System.out.println(strport);
                                             int index = strport.indexOf("22");
-                                            if (index % 2 == 1)
+                                            if (index % 2 == 1) {
                                                 index++;
+                                            }
                                             strport = strport.substring(0, index);
                                             System.out.println(strport);
                                             sb = new StringBuilder();
@@ -1462,8 +1545,9 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                                 return;
                             if (BluetoothAnalysisUtils.analyzeData(data, protocol, ssumheat, mbus, parameterprotocol) == 1) {
                                 ((TextView) valveSettingFragment.getView().findViewById(R.id.et_meterId)).setText(protocol.getMeterID());
-                                if (protocol.getCloseTime() != null && protocol.getCloseTime().length() == 10)
+                                if (protocol.getCloseTime() != null && protocol.getCloseTime().length() == 10) {
                                     ((EditText) valveSettingFragment.getView().findViewById(R.id.et_endDate)).setText(protocol.getCloseTime());
+                                }
                                 CommonUtils.showToast(context, "阀门状态：" + protocol.getValveStatus());
                                 BluetoothToolsMainActivity.data = "";
                             }
@@ -1473,8 +1557,9 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                         Fragment subfragment = gprsCollectorSettingActivity.getSupportFragmentManager().getFragments().get(currentFragment);
                         if (subfragment instanceof GprsNormalFragment) {
                             GprsNormalFragment gprsNormalFragment = (GprsNormalFragment) subfragment;
-                            if (data == null || data.equals(""))
+                            if (data == null || data.equals("")) {
                                 return;
+                            }
                             if (data.contains("03794500")) {
                                 CommonUtils.showToast(context, "触发抄表成功");
                                 BluetoothToolsMainActivity.data = "";
@@ -1611,8 +1696,9 @@ public class BluetoothToolsMainActivity extends BaseActivity {
                                                 String strport = arrtcpip[2];
                                                 System.out.println(strport);
                                                 int index = strport.indexOf("22");
-                                                if (index % 2 == 1)
+                                                if (index % 2 == 1) {
                                                     index++;
+                                                }
                                                 strport = strport.substring(0, index);
                                                 System.out.println(strport);
                                                 sb = new StringBuilder();
@@ -2455,12 +2541,22 @@ public class BluetoothToolsMainActivity extends BaseActivity {
         }
     }
 
+    //点击两次返回退出程序
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            myFinish();
+            exit();
             return false;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > Constant.EXIT_DOUBLE_CLICK_TIME) {
+            CommonUtils.showToast(getApplicationContext(), getString(R.string.click_again_exit));
+            exitTime = System.currentTimeMillis();
+        } else {
+            System.exit(0);
+        }
     }
 }

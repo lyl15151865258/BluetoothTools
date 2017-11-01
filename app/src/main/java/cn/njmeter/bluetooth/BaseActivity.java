@@ -11,13 +11,23 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 
 import cn.njmeter.bluetooth.utils.LogUtils;
 import cn.njmeter.bluetooth.utils.ScreenTools;
@@ -30,34 +40,71 @@ import cn.njmeter.bluetooth.utils.ScreenTools;
 public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
-    public static int screenWidth, screenHeight;
-    public Dialog dialog;
-    private Context context;
+    private Dialog dialog;
+    protected int mWidth;
+    protected int mHeight;
+    protected float mDensity;
+    protected int mDensityDpi;
+    private TextView mJmuiTitleTv;
+    private ImageButton mReturnBtn;
+    private TextView mJmuiTitleLeft;
+    public Button mJmuiCommitBtn;
+    protected int mAvatarSize;
+    protected float mRatio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
         //保持屏幕常亮（禁止休眠）
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenWidth = dm.widthPixels;
-        screenHeight = dm.heightPixels;
-//        initFinishReceiver();
+        mDensity = dm.density;
+        mDensityDpi = dm.densityDpi;
+        mWidth = dm.widthPixels;
+        mHeight = dm.heightPixels;
+        mRatio = Math.min((float) mWidth / 720, (float) mHeight / 1280);
+        mAvatarSize = (int) (50 * mDensity);
+        dialog = new Dialog(this, R.style.loading_dialog);
     }
 
     /**
      * 沉浸模式View
      *
-     * @param views
+     * @param views 需要偏移的View控件
      */
     protected void setActionBarLayout(View... views) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            for (int i = 0; i < views.length; i++) {
-                views[i].setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
+            for (View view : views) {
+                view.setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
             }
         }
+    }
+
+    /**
+     * 沉浸模式View
+     *
+     * @param statusBar 状态栏
+     */
+    protected void setStatusBar(View statusBar) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            statusBar.setVisibility(View.VISIBLE);
+            statusBar.getLayoutParams().height = ScreenTools.getStatusHeight(this);
+            statusBar.setLayoutParams(statusBar.getLayoutParams());
+        } else {
+            statusBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (null != this.getCurrentFocus()) {
+            InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (mInputMethodManager != null) {
+                return mInputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return super.onTouchEvent(event);
     }
 
     @TargetApi(19)
@@ -131,11 +178,35 @@ public class BaseActivity extends AppCompatActivity {
         showToast(getString(resId));
     }
 
+    /**
+     * 自定义的Toast，避免重复出现
+     *
+     * @param msg
+     */
     public void showToast(String msg) {
-        if (toast == null)
-            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setText(msg);
+        if (toast == null) {
+            toast = new Toast(this);
+            //设置Toast显示位置，居中，向 X、Y轴偏移量均为0
+//        toast.setGravity(Gravity.CENTER, 0, 0);
+            //获取自定义视图
+            View view = LayoutInflater.from(this).inflate(R.layout.view_toast, null);
+            TextView tvMessage = view.findViewById(R.id.tv_toast_text);
+            //设置文本
+            tvMessage.setText(msg);
+            //设置视图
+            toast.setView(view);
+            //设置显示时长
+            toast.setDuration(Toast.LENGTH_SHORT);
+        } else {
+            View view = LayoutInflater.from(this).inflate(R.layout.view_toast, null);
+            TextView tvMessage = view.findViewById(R.id.tv_toast_text);
+            //设置文本
+            tvMessage.setText(msg);
+            //设置视图
+            toast.setView(view);
+            //设置显示时长
+            toast.setDuration(Toast.LENGTH_SHORT);
+        }
         toast.show();
     }
 
@@ -149,13 +220,13 @@ public class BaseActivity extends AppCompatActivity {
 
     public void openActivity(Class<?> pClass, Bundle bundle, Uri uri) {
         Intent intent = new Intent(this, pClass);
-        if (bundle != null)
+        if (bundle != null) {
             intent.putExtras(bundle);
-        if (uri != null)
+        }
+        if (uri != null) {
             intent.setData(uri);
+        }
         startActivity(intent);
-        //增加动画
-        overridePendingTransition(R.anim.anim_activity_right_in, R.anim.anim_activity_left_out);
     }
 
     public void openActivity(String action) {
@@ -168,18 +239,13 @@ public class BaseActivity extends AppCompatActivity {
 
     public void openActivity(String action, Bundle bundle, Uri uri) {
         Intent intent = new Intent(action);
-        if (bundle != null)
+        if (bundle != null) {
             intent.putExtras(bundle);
-        if (uri != null)
+        }
+        if (uri != null) {
             intent.setData(uri);
+        }
         startActivity(intent);
-        //增加动画
-        overridePendingTransition(R.anim.anim_activity_right_in, R.anim.anim_activity_left_out);
-    }
-
-    public void myFinish() {
-        super.finish();
-        overridePendingTransition(R.anim.anim_activity_left_in, R.anim.anim_activity_right_out);
     }
 
     /**
@@ -190,7 +256,7 @@ public class BaseActivity extends AppCompatActivity {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if (isShouldHideKeyboard(v, ev)) {
-                hideKeyboard(v.getWindowToken());
+                AppCompatActivity currentActivity = (AppCompatActivity) MyActivityManager.getInstance().getCurrentActivity();
             }
         }
         return super.dispatchTouchEvent(ev);
@@ -219,7 +285,10 @@ public class BaseActivity extends AppCompatActivity {
     private void hideKeyboard(IBinder token) {
         if (token != null) {
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+            if (null != im) {
+                im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
         }
     }
+
 }

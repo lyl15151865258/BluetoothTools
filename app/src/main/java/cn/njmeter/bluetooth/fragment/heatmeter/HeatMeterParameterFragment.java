@@ -39,6 +39,7 @@ import cn.njmeter.bluetooth.R;
 import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
+import cn.njmeter.bluetooth.utils.CommonUtils;
 
 public class HeatMeterParameterFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.scrollView_root)
@@ -47,7 +48,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
     @BindView(R.id.btn_read_parameter)
     Button btn_read_parameter;
     @BindView(R.id.et_meterId)
-    TextView tv_meterId;
+    EditText et_meterId;
     @BindView(R.id.btn_open_valve)
     Button btn_open_valve;
     @BindView(R.id.btn_close_valve)
@@ -195,9 +196,6 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_heatmeter_parameter_bluetooth, container, false);
         ButterKnife.bind(this, view);
         context = getContext();
-        //FrameLayout generalActionBar = (FrameLayout) view.findViewById(R.id.general_actionbar);
-        //TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
-        //tvTitle.setText(R.string.main_tab_name_topworx);
         initView(view);
         initData();
         return view;
@@ -241,6 +239,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         spinnermetersize.setAdapter(metersize15_40list);
         spinnermetersize.setSelection(0, false);
         spinnerpointwhere.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 pointwhere = pointwhereitems[arg2];
                 if (pointwhere.endsWith("1000")) {
@@ -268,6 +267,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         spinnermetersize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (pointwhere.endsWith("1000")) {
                     metersize = metersize15_40items[arg2];
@@ -284,19 +284,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonprograme.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -316,11 +316,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65536) {
-                            Toast.makeText(context, "请正确输入分界点1(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入分界点1(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入分界点1(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入分界点1(<65536)");
                         return;
                     }
 
@@ -329,11 +329,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         yi = Integer.parseInt(y);
                         if (yi > 65536) {
-                            Toast.makeText(context, "请正确输入分界点2(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入分界点2(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入分界点2(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入分界点2(<65536)");
                         return;
                     }
 
@@ -342,22 +342,22 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         zi = Integer.parseInt(z);
                         if (zi > 65536) {
-                            Toast.makeText(context, "请正确输入分界点3(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入分界点3(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入分界点3(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入分界点3(<65536)");
                         return;
                     }
                     o = pointwhere;
                     try {
                         oi = Integer.parseInt(o);
                         if (oi > 65536) {
-                            Toast.makeText(context, "请正确选则显示单位(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确选则显示单位(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入显示单位(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确选则显示单位(<65536)");
                         return;
                     }
 
@@ -365,17 +365,17 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         pi = Integer.parseInt(p);
                         if (pi > 65536) {
-                            Toast.makeText(context, "请正确显示仪表口(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确选择仪表口径(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入显示仪表口(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确选择仪表口径(<65536)");
                         return;
                     }
                     q = EditTextsleeptime.getText().toString().replace(" ", "");
                     EditTextsleeptime.setText(q);
                     if ((q.length() > 4) || (q.length() <= 0)) {
-                        Toast.makeText(context, "请正确输入睡眠时间(<FFFF)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入睡眠时间(<FFFF)");
                         return;
                     }
                     String tx = programme(meterid, strDeviceTypeCode, "001111", xi, yi, zi, oi, pi, q);
@@ -386,9 +386,9 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         btn_read_parameter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
-                tv_meterId.setText("");
+                et_meterId.setText("");
                 BluetoothToolsMainActivity.data = "";
                 //String tx="6820AAAAAAAAAAAAAA1A039A2F001416";6849FFFFFFFFFFFFFF0103901F005D16
                 String tx = "6820AAAAAAAAAAAAAA1A039A2F001416";
@@ -397,19 +397,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         btn_open_valve.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -421,19 +421,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         btn_close_valve.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -446,20 +446,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttonclearmeter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -472,20 +472,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttoninitreport.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -498,20 +498,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttonclearbatter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -524,20 +524,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         btn_amend_meterid.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -545,12 +545,12 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     amendmeterid = et_amend_meterId.getText().toString().replace(" ", "");
                     et_amend_meterId.setText(amendmeterid);
                     if (amendmeterid.length() != 8) {
-                        Toast.makeText(context, "请输入8位修改表号", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请输入8位修改表号");
                     } else {
                         try {
                             Integer.parseInt(amendmeterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位修改表号", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位修改表号");
                             return;
                         }
                         String tx = amendmeterid(meterid, strDeviceTypeCode, "001111", amendmeterid);
@@ -593,7 +593,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         }, 0, 1000);
 
         tv_date.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_DATAPICK;
@@ -601,7 +601,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         tv_time.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_TIMEPICK;
@@ -609,20 +609,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
-            // @Override
             @SuppressLint("SimpleDateFormat")
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -635,7 +635,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                         Date xd = sdf.parse(x);
                         rx = sdf1.format(xd);
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入当前时间", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入当前时间");
                         return;
                     }
 
@@ -652,7 +652,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             public void onClick(View arg0) {
                 String tx = EditTextsend.getText().toString().replace(" ", "");
                 if (tx.length() % 2 != 0) {
-                    Toast.makeText(context, "发送的指令为--奇数", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "发送的指令长度为--奇数");
                     return;
                 }
                 tx = tx + AnalysisUtils.getCSSum(tx, 0) + "16";
@@ -666,7 +666,7 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                 String tx = "";
                 tx = EditTextsend.getText().toString().replace(" ", "");
                 if (tx.length() % 2 != 0) {
-                    Toast.makeText(context, "发送的指令为--奇数", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "发送的指令长度为--奇数");
                     return;
                 }
                 EditTextsend.setText(tx);
@@ -676,28 +676,30 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttontotalunit.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
                     String units = "";
                     boolean b = RadioButtonunitm.isChecked();
-                    if (b) units = "100E";
-                    else
+                    if (b) {
+                        units = "100E";
+                    } else {
                         units = "E803";
+                    }
                     String tx = setheatunit(meterid, strDeviceTypeCode, "001111", units);
                     EditTextsend.setText(tx);
                     BluetoothToolsMainActivity.data = "";
@@ -707,20 +709,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttonamendx.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -731,11 +733,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65536) {
-                            Toast.makeText(context, "请正确输入修正系数(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入修正系数(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入修正系数(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入修正系数(<65536)");
                         return;
                     }
                     String tx = amendx(meterid, strDeviceTypeCode, "001111", xi);
@@ -746,20 +748,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonstartf.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -770,11 +772,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65536) {
-                            Toast.makeText(context, "请正确输入启动流量(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入启动流量(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入启动流量(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请请正确输入启动流量(<65536)");
                         return;
                     }
                     String tx = amendstartf(meterid, strDeviceTypeCode, "001111", xi);
@@ -785,20 +787,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonamendslope.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -809,11 +811,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65536) {
-                            Toast.makeText(context, "请正确输入斜率修正(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入斜率修正(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入斜率修正(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入斜率修正(<65536)");
                         return;
                     }
                     String tx = amendslope(meterid, strDeviceTypeCode, "001111", xi);
@@ -824,20 +826,20 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonstartf.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -848,11 +850,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65536) {
-                            Toast.makeText(context, "请正确输入启动流量(<65536)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入启动流量(<65536)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入启动流量(<65536)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入启动流量(<65536)");
                         return;
                     }
                     String tx = amendstartf(meterid, strDeviceTypeCode, "001111", xi);
@@ -864,19 +866,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttonsettcoef.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -887,11 +889,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 4000) {
-                            Toast.makeText(context, "请正确输入T1温度补偿(<4000)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T1温度补偿(<4000)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T1温度补偿(<4000)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T1温度补偿(<4000)");
                         return;
                     }
                     String y = "";
@@ -901,17 +903,21 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         yi = Integer.parseInt(y);
                         if (yi > 4000) {
-                            Toast.makeText(context, "请正确输入T2温度补偿(<4000)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T2温度补偿(<4000)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T2温度补偿(<4000)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T2温度补偿(<4000)");
                         return;
                     }
                     boolean xb = CheckBoxsett1coef.isChecked();
                     boolean yb = CheckBoxsett2coef.isChecked();
-                    if (xb) xi = 65536 - xi;
-                    if (yb) yi = 65536 - yi;
+                    if (xb) {
+                        xi = 65536 - xi;
+                    }
+                    if (yb) {
+                        yi = 65536 - yi;
+                    }
                     String tx = amendtcoef(meterid, strDeviceTypeCode, "001111", xi, yi);
                     EditTextsend.setText(tx);
                     BluetoothToolsMainActivity.data = "";
@@ -920,19 +926,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttonsettparameter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -943,11 +949,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 65535) {
-                            Toast.makeText(context, "请正确输入T1温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T1温度系数(<65535)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T1温度补偿(<65535)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T1温度系数(<65535)");
                         return;
                     }
                     String y = "";
@@ -957,11 +963,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         yi = Integer.parseInt(y);
                         if (yi > 65535) {
-                            Toast.makeText(context, "请正确输入T2温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T2温度系数(<65535)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T2温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T2温度系数(<65535)");
                         return;
                     }
                     String z = "";
@@ -971,11 +977,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         zi = Integer.parseInt(z);
                         if (zi > 65535) {
-                            Toast.makeText(context, "请正确输入T3温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T3温度系数(<65535)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T3温度补偿(<65535)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T3温度系数(<65535)");
                         return;
                     }
                     String o = "";
@@ -985,11 +991,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         oi = Integer.parseInt(o);
                         if (oi > 65535) {
-                            Toast.makeText(context, "请正确输入T4温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T4温度系数(<65535)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T4温度补偿(<65535)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T4温度系数(<65535)");
                         return;
                     }
                     String p = "";
@@ -999,11 +1005,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         pi = Integer.parseInt(p);
                         if (pi > 65535) {
-                            Toast.makeText(context, "请正确输入T5温度系数(<65535)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入T4温度系数(<65535)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入T5温度补偿(<65535)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入T4温度系数(<65535)");
                         return;
                     }
                     String tx = amendt(meterid, strDeviceTypeCode, "001111", xi, yi, zi, oi, pi);
@@ -1016,19 +1022,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
 
 
         Buttoncreditdsumheat.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -1039,11 +1045,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 99999999) {
-                            Toast.makeText(context, "请正确输入充值热量(<99999999)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入充值热量(<99999999)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入充值热量(<99999999)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入充值热量(<99999999)");
                         return;
                     }
                     String tx = creditdsumheat(meterid, strDeviceTypeCode, "001111", xi);
@@ -1055,19 +1061,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         });
 
         Buttonclearcredit.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -1078,19 +1084,19 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             }
         });
         Buttoninitdsumheat.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -1101,11 +1107,11 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
                     try {
                         xi = Integer.parseInt(x);
                         if (xi > 99999999) {
-                            Toast.makeText(context, "请正确输入初始热量(<99999999)", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请正确输入初始热量(<99999999)");
                             return;
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入初始热量(<99999999)", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入初始热量(<99999999)");
                         return;
                     }
                     String tx = initdsumheat(meterid, strDeviceTypeCode, "001111", xi);
@@ -1123,16 +1129,16 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
             @Override
             public void onClick(View v) {
                 String meterid = "";
-                meterid = tv_meterId.getText().toString().replace(" ", "");
-                tv_meterId.setText(meterid);
+                meterid = et_meterId.getText().toString().replace(" ", "");
+                et_meterId.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -1148,6 +1154,23 @@ public class HeatMeterParameterFragment extends BaseFragment implements View.OnC
         //SharedPreferences sharedPreferences = getSharedPreferences("setparameter", Context.MODE_PRIVATE);
         //et_meterId.setText(sharedPreferences.getString("meterid","11111111"));
         //et_amend_meterId.setText(sharedPreferences.getString("amendmeterid",""));
+    }
+
+    @Override
+    public void initData() {
+        //mTvVersionName.setText(TDevice.getVersionName());
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int id = v.getId();
+        switch (id) {
+            case R.id.btn_read_parameter:
+
+                break;
+            default:
+                break;
+        }
     }
 
     Handler dateandtimeHandler = new Handler() {

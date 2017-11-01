@@ -198,6 +198,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         spinnermetersize.setSelection(0, false);
 
         spinnerpointwhere.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 pointwhere = pointwhereitems[arg2];
                 if (pointwhere.endsWith("1000")) {
@@ -225,8 +226,8 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         spinnermetersize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (pointwhere.endsWith("1000")) {
                     metersize = metersize15_40items[arg2];
                 } else if (pointwhere.endsWith("100")) {
@@ -242,7 +243,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         Buttonprograme.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
                 meterid = tv_meterId.getText().toString().replace(" ", "");
@@ -353,7 +354,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         btn_read_parameter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 tv_meterId.setText("");
                 BluetoothToolsMainActivity.data = "";
@@ -364,7 +365,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         });
 
         btn_amend_meterid.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -432,6 +433,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         };
         datetimetimer = new Timer();
         datetimetimer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 Message msg = new Message();
                 handler.sendMessage(msg);
@@ -439,7 +441,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         }, 0, 1000);
 
         tv_date.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_DATAPICK;
@@ -447,7 +449,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         tv_time.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_TIMEPICK;
@@ -455,7 +457,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             @SuppressLint("SimpleDateFormat")
             public void onClick(View v) {
                 String meterid = "";
@@ -522,7 +524,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         });
 
         Buttontotalunit.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -541,9 +543,11 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
                     }
                     String units = "";
                     boolean b = RadioButtonunitm.isChecked();
-                    if (b) units = "100E";
-                    else
+                    if (b) {
+                        units = "100E";
+                    } else {
                         units = "E803";
+                    }
                     String tx = setheatunit(meterid, productType, "001111", units);
                     EditTextsend.setText(tx);
                     BluetoothToolsMainActivity.data = "";
@@ -558,7 +562,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         });
 
         Buttonamendx.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -602,7 +606,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         Buttonstartf.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -646,7 +650,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         Buttonamendslope.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -690,7 +694,7 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
             }
         });
         Buttonstartf.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
@@ -836,6 +840,30 @@ public class HydrantParameterFragment extends BaseFragment implements View.OnCli
         }
 
     };
+
+    private void onClickUpdate() {
+
+        //new UpdateManager(getActivity(), true).checkUpdate();
+    }
+
+
+    public String Endworktime(String meterid, String producttypetx, String factorycode, String x) {
+        String r = "";
+        String rx = "";
+        int i = 1;
+
+        try {
+            rx = Integer.toHexString(Integer.valueOf(x.substring(0, 2))) + "00" +
+                    (Integer.valueOf(x.substring(2, 4)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(2, 4)))) : Integer.toHexString(Integer.valueOf(x.substring(2, 4)))) + "00" +
+                    (Integer.valueOf(x.substring(4, 6)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(4, 6)))) : Integer.toHexString(Integer.valueOf(x.substring(4, 6)))) + "00" +
+                    (Integer.valueOf(x.substring(6, 8)) < 16 ? ("0" + Integer.toHexString(Integer.valueOf(x.substring(6, 8)))) : Integer.toHexString(Integer.valueOf(x.substring(6, 8)))) + "00";
+            String cs = AnalysisUtils.getCSSum("68" + producttypetx + meterid + factorycode + "360CA0198800" + rx, 0);
+            r = "68" + producttypetx + meterid + factorycode + "360CA0198800" + rx + cs + "16";
+        } catch (Exception e) {
+        }
+        return r;
+    }
+
 
     private void updateDateTimeDisplay() {
         CheckBoxsyn.setChecked(false);

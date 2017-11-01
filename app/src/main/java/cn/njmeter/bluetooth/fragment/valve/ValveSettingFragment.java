@@ -37,6 +37,7 @@ import cn.njmeter.bluetooth.R;
 import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
+import cn.njmeter.bluetooth.utils.CommonUtils;
 
 public class ValveSettingFragment extends BaseFragment implements View.OnClickListener {
 
@@ -155,7 +156,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
 
         tv_endDate.setText("2099-12-31");
         Buttonreadparameter.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 et_meterid.setText("");
                 tv_endDate.setText("");
@@ -167,19 +168,19 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         Buttonopenvalve.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -195,19 +196,19 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         Buttonclosevalve.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 String meterid = "";
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -223,26 +224,26 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         Buttonsetmeterid.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 et_meterid.setText("11111111");
             }
         });
         Buttonamendmeterid.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -250,12 +251,12 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                     amendmeterid = EditTextamendmeterid.getText().toString().replace(" ", "");
                     EditTextamendmeterid.setText(amendmeterid);
                     if (amendmeterid.length() != 8) {
-                        Toast.makeText(context, "请输入8位修改表号", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请输入8位修改表号");
                     } else {
                         try {
                             Integer.parseInt(amendmeterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位修改表号", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位修改表号");
                             return;
                         }
                         String tx = amendmeterid(meterid, strDeviceTypeCode, "001111", amendmeterid);
@@ -272,20 +273,20 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         Buttoninsteadmeterid.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
 
                 String meterid = "";
                 meterid = EditTextamendmeterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -320,6 +321,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
         };
         datetimetimer = new Timer();
         datetimetimer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 Message msg = new Message();
                 handler.sendMessage(msg);
@@ -332,13 +334,13 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -351,7 +353,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                         Date xd = sdf.parse(x);
                         rx = sdf1.format(xd);
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入当前时间", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入当前时间");
                         return;
                     }
 
@@ -373,7 +375,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         tv_date.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_DATAPICK;
@@ -381,7 +383,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         tv_time.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = SHOW_TIMEPICK;
@@ -389,20 +391,20 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             }
         });
         Buttonadjusttime.setOnClickListener(new View.OnClickListener() {
-            // @Override
+            @Override
             @SuppressLint("SimpleDateFormat")
             public void onClick(View v) {
                 String meterid = "";
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -415,7 +417,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                         Date xd = sdf.parse(x);
                         rx = sdf1.format(xd);
                     } catch (Exception e) {
-                        Toast.makeText(context, "请正确输入当前时间", Toast.LENGTH_SHORT).show();
+                        CommonUtils.showToast(context, "请正确输入当前时间");
                         return;
                     }
 
@@ -432,7 +434,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
             public void onClick(View arg0) {
                 String tx = EditTextsend.getText().toString().replace(" ", "");
                 if (tx.length() % 2 != 0) {
-                    Toast.makeText(context, "发送的指令为--奇数", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "发送的指令长度为--奇数");
                     return;
                 }
                 tx = tx + AnalysisUtils.getCSSum(tx, 0) + "16";
@@ -446,7 +448,7 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                 String tx = "";
                 tx = EditTextsend.getText().toString().replace(" ", "");
                 if (tx.length() % 2 != 0) {
-                    Toast.makeText(context, "发送的指令为--奇数", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "发送的指令长度为--奇数");
                     return;
                 }
                 EditTextsend.setText(tx);
@@ -464,13 +466,13 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
                 meterid = et_meterid.getText().toString().replace(" ", "");
                 et_meterid.setText(meterid);
                 if (meterid.length() != 8) {
-                    Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                    CommonUtils.showToast(context, "请输入8位出厂编码");
                 } else {
                     if (!meterid.endsWith("FFFFFFFF")) {
                         try {
                             Integer.parseInt(meterid);
                         } catch (Exception e) {
-                            Toast.makeText(context, "请输入8位出厂编码", Toast.LENGTH_SHORT).show();
+                            CommonUtils.showToast(context, "请输入8位出厂编码");
                             return;
                         }
                     }
@@ -491,6 +493,24 @@ public class ValveSettingFragment extends BaseFragment implements View.OnClickLi
         //SharedPreferences sharedPreferences = getSharedPreferences("setparameter", Context.MODE_PRIVATE);
         //et_meterid.setText(sharedPreferences.getString("meterid","11111111"));
         //EditTextamendmeterid.setText(sharedPreferences.getString("amendmeterid",""));
+    }
+
+
+    @Override
+    public void initData() {
+        //mTvVersionName.setText(TDevice.getVersionName());
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int id = v.getId();
+        switch (id) {
+            case R.id.btn_read_parameter:
+
+                break;
+            default:
+                break;
+        }
     }
 
     Handler dateandtimeHandler = new Handler() {

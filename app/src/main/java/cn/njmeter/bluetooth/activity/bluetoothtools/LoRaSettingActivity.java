@@ -97,7 +97,7 @@ public class LoRaSettingActivity extends BaseActivity {
             getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 //            int screenHeight = getWindow().getDecorView().getRootView().getHeight();
             //计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
-            int heightDifference = screenHeight - rect.bottom;
+            int heightDifference = mHeight - rect.bottom;
             //针对在父控件中的View的参数获取
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) scrollView.getLayoutParams();
             //设置ScrollView的marginBottom的值为软键盘占有的高度即可
@@ -363,15 +363,6 @@ public class LoRaSettingActivity extends BaseActivity {
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            myFinish();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
