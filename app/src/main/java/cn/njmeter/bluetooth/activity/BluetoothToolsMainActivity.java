@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -2556,7 +2556,7 @@ public class BluetoothToolsMainActivity extends BaseActivity {
             CommonUtils.showToast(getApplicationContext(), getString(R.string.click_again_exit));
             exitTime = System.currentTimeMillis();
         } else {
-            System.exit(0);
+            finish();
         }
     }
 }

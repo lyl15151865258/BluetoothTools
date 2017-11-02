@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
+import cn.njmeter.bluetooth.activity.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
 import cn.njmeter.bluetooth.utils.CommonUtils;
 import cn.njmeter.bluetooth.utils.LogUtils;

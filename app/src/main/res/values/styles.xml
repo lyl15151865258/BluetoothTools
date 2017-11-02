@@ -879,8 +879,25 @@
         <item name="PermissionBgFilterColor">#75D175</item>
     </style>
 
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_activity_right_in</item>
+        // 新的activity创建进入效果
+        <item name="android:activityOpenExitAnimation">@anim/anim_activity_left_out</item>
+        // activity还没有finish()下退出效果
+        <item name="android:activityCloseEnterAnimation">@anim/anim_activity_left_in</item>
+        // 上一个activity返回进入效果
+        <item name="android:activityCloseExitAnimation">@anim/anim_activity_right_out</item>
+        // activity.finish()之后退出效果
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/welcome</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="AppTheme.Button.Transparent" parent="Widget.AppCompat.Button.Colored">

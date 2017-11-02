@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
+import cn.njmeter.bluetooth.activity.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.constant.Constant;
 import cn.njmeter.bluetooth.constant.ProductType;
 import cn.njmeter.bluetooth.fragment.BaseFragment;

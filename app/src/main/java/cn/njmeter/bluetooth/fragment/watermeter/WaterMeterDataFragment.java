@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
+import cn.njmeter.bluetooth.activity.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.adapter.MeterDataAdapter;
 import cn.njmeter.bluetooth.bean.MeterRecord;
 import cn.njmeter.bluetooth.bean.Protocol;

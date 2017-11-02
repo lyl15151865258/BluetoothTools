@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,20 +19,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.njmeter.bluetooth.BaseActivity;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterAdjustFragment;
-import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterDataFragment;
-import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterLcdFragment;
-import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterParameterFragment;
-import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterSetPressureFragment;
+import cn.njmeter.bluetooth.fragment.hydrant.HydrantAdjustFragment;
+import cn.njmeter.bluetooth.fragment.hydrant.HydrantDataFragment;
+import cn.njmeter.bluetooth.fragment.hydrant.HydrantGPRSFragment;
+import cn.njmeter.bluetooth.fragment.hydrant.HydrantLcdFragment;
+import cn.njmeter.bluetooth.fragment.hydrant.HydrantParameterFragment;
 import cn.njmeter.bluetooth.utils.ScreenTools;
 import cn.njmeter.bluetooth.widget.NoScrollViewPager;
 
 /**
  * Created by Li Yuliang on 2017/8/8.
- * 水表蓝牙设置页面，包含4个Fragment
+ * 智能消火栓设置页面，包含5个Fragment
  */
 
-public class WaterMeterSettingActivity extends BaseActivity {
+public class HydrantSettingActivity extends BaseActivity {
     @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
     LinearLayout[] menus;
     @BindView(R.id.viewpager)
@@ -44,7 +43,7 @@ public class WaterMeterSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_watermeter_bluetooth);
+        setContentView(R.layout.activity_hydrant_bluetooth);
         LinearLayout ll_root = (LinearLayout) findViewById(R.id.ll_root);
         ll_root.setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
         ButterKnife.bind(this);
@@ -63,7 +62,7 @@ public class WaterMeterSettingActivity extends BaseActivity {
         iv_search_bluetooth_device.setImageResource(imageSrc);
         viewPager.setAdapter(viewPagerAdapter);
         //设置Fragment预加载，非常重要,可以保存每个页面fragment已有的信息,防止切换后原页面信息丢失
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setOffscreenPageLimit(4);
         //刚进来默认选择第一个
         menus[0].setSelected(true);
         //viewPager添加滑动监听，用于控制TextView的展示
@@ -133,17 +132,15 @@ public class WaterMeterSettingActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new WaterMeterDataFragment();
+                    return new HydrantDataFragment();
                 case 1:
-                    return new WaterMeterLcdFragment();
+                    return new HydrantLcdFragment();
                 case 2:
-                    return new WaterMeterParameterFragment();
+                    return new HydrantParameterFragment();
                 case 3:
-                    return new WaterMeterAdjustFragment();
+                    return new HydrantAdjustFragment();
                 case 4:
-                    return new WaterMeterSetPressureFragment();
-                default:
-                    break;
+                    return new HydrantGPRSFragment();
             }
             return null;
         }
@@ -163,4 +160,3 @@ public class WaterMeterSettingActivity extends BaseActivity {
         viewPager.setCurrentItem(BluetoothToolsMainActivity.currentFragment, false);
     }
 }
-

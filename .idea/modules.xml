@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BluetoothTools.iml" filepath="$PROJECT_DIR$/BluetoothTools.iml" />
-      <module fileurl="file://D:\AndroidStudioProjects\BluetoothTools\BluetoothTools.iml" filepath="D:\AndroidStudioProjects\BluetoothTools\BluetoothTools.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\AndroidStudioProjects\BluetoothTools\app\app.iml" filepath="D:\AndroidStudioProjects\BluetoothTools\app\app.iml" />
     </modules>
   </component>
 </project>

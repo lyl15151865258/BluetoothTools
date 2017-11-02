@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -7,7 +7,6 @@ import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;

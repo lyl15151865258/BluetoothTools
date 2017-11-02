@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,20 +19,21 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.njmeter.bluetooth.BaseActivity;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.fragment.collector.GprsAddDeleteMeterFragment;
-import cn.njmeter.bluetooth.fragment.collector.GprsNormalFragment;
-import cn.njmeter.bluetooth.fragment.collector.GprsSetPressureFragment;
-import cn.njmeter.bluetooth.fragment.collector.GprsSettingFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterAdjustFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterDataFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterLcdFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterParameterFragment;
+import cn.njmeter.bluetooth.fragment.watermeter.WaterMeterSetPressureFragment;
 import cn.njmeter.bluetooth.utils.ScreenTools;
 import cn.njmeter.bluetooth.widget.NoScrollViewPager;
 
 /**
  * Created by Li Yuliang on 2017/8/8.
- * GPRS采集终端设置页面，包含4个Fragment
+ * 水表蓝牙设置页面，包含4个Fragment
  */
 
-public class GPRSCollectorSettingActivity extends BaseActivity {
-    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
+public class WaterMeterSettingActivity extends BaseActivity {
+    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
     LinearLayout[] menus;
     @BindView(R.id.viewpager)
     NoScrollViewPager viewPager;
@@ -43,10 +43,10 @@ public class GPRSCollectorSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gprs_collector_bluetooth);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_watermeter_bluetooth);
         LinearLayout ll_root = (LinearLayout) findViewById(R.id.ll_root);
         ll_root.setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
+        ButterKnife.bind(this);
         BluetoothToolsMainActivity.currentFragment = 0;
         initView();
     }
@@ -62,7 +62,7 @@ public class GPRSCollectorSettingActivity extends BaseActivity {
         iv_search_bluetooth_device.setImageResource(imageSrc);
         viewPager.setAdapter(viewPagerAdapter);
         //设置Fragment预加载，非常重要,可以保存每个页面fragment已有的信息,防止切换后原页面信息丢失
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
         //刚进来默认选择第一个
         menus[0].setSelected(true);
         //viewPager添加滑动监听，用于控制TextView的展示
@@ -125,27 +125,31 @@ public class GPRSCollectorSettingActivity extends BaseActivity {
     private FragmentStatePagerAdapter viewPagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new GprsNormalFragment();
+                    return new WaterMeterDataFragment();
                 case 1:
-                    return new GprsSettingFragment();
+                    return new WaterMeterLcdFragment();
                 case 2:
-                    return new GprsAddDeleteMeterFragment();
+                    return new WaterMeterParameterFragment();
                 case 3:
-                    return new GprsSetPressureFragment();
+                    return new WaterMeterAdjustFragment();
+                case 4:
+                    return new WaterMeterSetPressureFragment();
+                default:
+                    break;
             }
             return null;
         }
     };
 
     //TextView点击事件
-    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
+    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
     public void onClick(LinearLayout linearLayout) {
         for (int i = 0; i < menus.length; i++) {
             menus[i].setSelected(false);

@@ -28,7 +28,6 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,8 +38,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
-import cn.njmeter.bluetooth.bean.TcpUdpParam;
+import cn.njmeter.bluetooth.activity.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 import cn.njmeter.bluetooth.utils.AnalysisUtils;
 import cn.njmeter.bluetooth.utils.CommonUtils;

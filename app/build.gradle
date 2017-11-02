@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
@@ -7,20 +11,66 @@ android {
         applicationId "cn.njmeter.bluetooth"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
         release {
-            minifyEnabled false
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
+    buildTypes {
+        debug {
+            // 是否支持调试
+            debuggable true
+            // 是否支持jni调试
+            jniDebuggable true
+            // 代码压缩
+            minifyEnabled true
+            // 是否支持Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            // 是否支持本地化整理
+            pseudoLocalesEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //打签名包时，需要添加此设置
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // 是否支持调试
+            debuggable false
+            // 是否支持jni调试
+            jniDebuggable false
+            // 混淆
+            minifyEnabled true
+            // 是否支持Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            // 是否支持本地化整理
+            pseudoLocalesEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //打签名包时，需要添加此设置
+            signingConfig signingConfigs.release
         }
     }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "JiangSuMetter_${variant.versionName}.apk"
+            outputFileName = "蓝牙工具_${variant.versionName}.apk"
         }
     }
 }

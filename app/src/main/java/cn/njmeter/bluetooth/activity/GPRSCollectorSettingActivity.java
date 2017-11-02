@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,19 +19,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.njmeter.bluetooth.BaseActivity;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterAdjustFragment;
-import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterDataFragment;
-import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterLcdFragment;
-import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterParameterFragment;
+import cn.njmeter.bluetooth.fragment.collector.GprsAddDeleteMeterFragment;
+import cn.njmeter.bluetooth.fragment.collector.GprsNormalFragment;
+import cn.njmeter.bluetooth.fragment.collector.GprsSetPressureFragment;
+import cn.njmeter.bluetooth.fragment.collector.GprsSettingFragment;
 import cn.njmeter.bluetooth.utils.ScreenTools;
 import cn.njmeter.bluetooth.widget.NoScrollViewPager;
 
 /**
- * Created by Li Yuliang on 2017/8/9.
- * 热表蓝牙设置页面，包含4个Fragment
+ * Created by Li Yuliang on 2017/8/8.
+ * GPRS采集终端设置页面，包含4个Fragment
  */
 
-public class HeatMeterSettingActivity extends BaseActivity {
+public class GPRSCollectorSettingActivity extends BaseActivity {
     @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
     LinearLayout[] menus;
     @BindView(R.id.viewpager)
@@ -43,10 +42,10 @@ public class HeatMeterSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_heatmeter_bluetooth);
+        setContentView(R.layout.activity_gprs_collector_bluetooth);
+        ButterKnife.bind(this);
         LinearLayout ll_root = (LinearLayout) findViewById(R.id.ll_root);
         ll_root.setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
-        ButterKnife.bind(this);
         BluetoothToolsMainActivity.currentFragment = 0;
         initView();
     }
@@ -132,13 +131,13 @@ public class HeatMeterSettingActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new HeatMeterDataFragment();
+                    return new GprsNormalFragment();
                 case 1:
-                    return new HeatMeterLcdFragment();
+                    return new GprsSettingFragment();
                 case 2:
-                    return new HeatMeterParameterFragment();
+                    return new GprsAddDeleteMeterFragment();
                 case 3:
-                    return new HeatMeterAdjustFragment();
+                    return new GprsSetPressureFragment();
             }
             return null;
         }
@@ -157,6 +156,5 @@ public class HeatMeterSettingActivity extends BaseActivity {
         BluetoothToolsMainActivity.currentFragment = (Integer) linearLayout.getTag();
         viewPager.setCurrentItem(BluetoothToolsMainActivity.currentFragment, false);
     }
-
 }
 

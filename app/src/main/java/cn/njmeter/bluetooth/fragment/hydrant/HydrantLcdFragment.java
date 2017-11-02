@@ -16,7 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.activity.bluetoothtools.BluetoothToolsMainActivity;
+import cn.njmeter.bluetooth.activity.BluetoothToolsMainActivity;
 import cn.njmeter.bluetooth.fragment.BaseFragment;
 
 public class HydrantLcdFragment extends BaseFragment {

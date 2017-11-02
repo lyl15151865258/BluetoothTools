@@ -1,4 +1,4 @@
-package cn.njmeter.bluetooth.activity.bluetoothtools;
+package cn.njmeter.bluetooth.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,21 +19,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.njmeter.bluetooth.BaseActivity;
 import cn.njmeter.bluetooth.R;
-import cn.njmeter.bluetooth.fragment.hydrant.HydrantAdjustFragment;
-import cn.njmeter.bluetooth.fragment.hydrant.HydrantDataFragment;
-import cn.njmeter.bluetooth.fragment.hydrant.HydrantGPRSFragment;
-import cn.njmeter.bluetooth.fragment.hydrant.HydrantLcdFragment;
-import cn.njmeter.bluetooth.fragment.hydrant.HydrantParameterFragment;
+import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterAdjustFragment;
+import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterDataFragment;
+import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterLcdFragment;
+import cn.njmeter.bluetooth.fragment.heatmeter.HeatMeterParameterFragment;
 import cn.njmeter.bluetooth.utils.ScreenTools;
 import cn.njmeter.bluetooth.widget.NoScrollViewPager;
 
 /**
- * Created by Li Yuliang on 2017/8/8.
- * 智能消火栓设置页面，包含5个Fragment
+ * Created by Li Yuliang on 2017/8/9.
+ * 热表蓝牙设置页面，包含4个Fragment
  */
 
-public class HydrantSettingActivity extends BaseActivity {
-    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
+public class HeatMeterSettingActivity extends BaseActivity {
+    @BindViews({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
     LinearLayout[] menus;
     @BindView(R.id.viewpager)
     NoScrollViewPager viewPager;
@@ -44,7 +42,7 @@ public class HydrantSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hydrant_bluetooth);
+        setContentView(R.layout.activity_heatmeter_bluetooth);
         LinearLayout ll_root = (LinearLayout) findViewById(R.id.ll_root);
         ll_root.setPadding(0, ScreenTools.getStatusBarHeight(this), 0, 0);
         ButterKnife.bind(this);
@@ -126,29 +124,27 @@ public class HydrantSettingActivity extends BaseActivity {
     private FragmentStatePagerAdapter viewPagerAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public int getCount() {
-            return 5;
+            return 4;
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new HydrantDataFragment();
+                    return new HeatMeterDataFragment();
                 case 1:
-                    return new HydrantLcdFragment();
+                    return new HeatMeterLcdFragment();
                 case 2:
-                    return new HydrantParameterFragment();
+                    return new HeatMeterParameterFragment();
                 case 3:
-                    return new HydrantAdjustFragment();
-                case 4:
-                    return new HydrantGPRSFragment();
+                    return new HeatMeterAdjustFragment();
             }
             return null;
         }
     };
 
     //TextView点击事件
-    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d, R.id.ll_e})
+    @OnClick({R.id.ll_a, R.id.ll_b, R.id.ll_c, R.id.ll_d})
     public void onClick(LinearLayout linearLayout) {
         for (int i = 0; i < menus.length; i++) {
             menus[i].setSelected(false);
@@ -160,4 +156,6 @@ public class HydrantSettingActivity extends BaseActivity {
         BluetoothToolsMainActivity.currentFragment = (Integer) linearLayout.getTag();
         viewPager.setCurrentItem(BluetoothToolsMainActivity.currentFragment, false);
     }
+
 }
+
